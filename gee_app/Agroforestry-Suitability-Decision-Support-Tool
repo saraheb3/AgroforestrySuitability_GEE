@@ -1,0 +1,1294 @@
+//Imports
+var GSOCseq = ee.Image("users/saraheb3/AFSuitabilityTool/GSOCseq_RSR_SSM3_Map030"),
+    Riparian_IA = ee.Image("users/saraheb3/AFSuitabilityTool/01Riparian_IA"),
+    Riparian_IL = ee.Image("users/saraheb3/AFSuitabilityTool/01Riparian_IL"),
+    Riparian_IN = ee.Image("users/saraheb3/AFSuitabilityTool/01Riparian_IN"),
+    Riparian_KS = ee.Image("users/saraheb3/AFSuitabilityTool/01Riparian_KS"),
+    Riparian_NE = ee.Image("users/saraheb3/AFSuitabilityTool/01Riparian_NE"),
+    Riparian_MI = ee.Image("users/saraheb3/AFSuitabilityTool/01Riparian_MI"),
+    Riparian_MN = ee.Image("users/saraheb3/AFSuitabilityTool/01Riparian_MN"),
+    Riparian_MO = ee.Image("users/saraheb3/AFSuitabilityTool/01Riparian_MO"),
+    Riparian_ND = ee.Image("users/saraheb3/AFSuitabilityTool/01Riparian_ND"),
+    Riparian_OH = ee.Image("users/saraheb3/AFSuitabilityTool/01Riparian_OH"),
+    Riparian_SD = ee.Image("users/saraheb3/AFSuitabilityTool/01Riparian_SD"),
+    Riparian_WI = ee.Image("users/saraheb3/AFSuitabilityTool/01Riparian_WI"),
+    GloSEM = ee.Image("users/saraheb3/AFSuitabilityTool/GloSEM_clipped_output"),
+    GroundNVI = ee.Image("users/saraheb3/AFSuitabilityTool/NVI_GW_raster"),
+    SurfaceNVI = ee.Image("users/saraheb3/AFSuitabilityTool/NVI_SW_raster"),
+    FieldBuffer_IA = ee.Image("users/saraheb3/AFSuitabilityTool/01FieldBuffer_IA"),
+    FieldBuffer_IL = ee.Image("users/saraheb3/AFSuitabilityTool/01FieldBuffer_IL"),
+    FieldBuffer_IN = ee.Image("users/saraheb3/AFSuitabilityTool/01FieldBuffer_IN"),
+    FieldBuffer_KS = ee.Image("users/saraheb3/AFSuitabilityTool/01FieldBuffer_KS"),
+    FieldBuffer_MI = ee.Image("users/saraheb3/AFSuitabilityTool/01FieldBuffer_MI"),
+    FieldBuffer_MN = ee.Image("users/saraheb3/AFSuitabilityTool/01FieldBuffer_MN"),
+    FieldBuffer_MO = ee.Image("users/saraheb3/AFSuitabilityTool/01FieldBuffer_MO"),
+    FieldBuffer_NE = ee.Image("users/saraheb3/AFSuitabilityTool/01FieldBuffer_NE"),
+    FieldBuffer_ND = ee.Image("users/saraheb3/AFSuitabilityTool/01FieldBuffer_ND"),
+    FieldBuffer_OH = ee.Image("users/saraheb3/AFSuitabilityTool/01FieldBuffer_OH"),
+    FieldBuffer_SD = ee.Image("users/saraheb3/AFSuitabilityTool/01FieldBuffer_SD"),
+    FieldBuffer_WI = ee.Image("users/saraheb3/AFSuitabilityTool/01FieldBuffer_WI"),
+    RateAgCons_EaseGovt = ee.Image("users/saraheb3/AFSuitabilityTool/RateAgCons_EaseGovt"),
+    RateConsPrac_TillCC = ee.Image("users/saraheb3/AFSuitabilityTool/RateConsPractice_TillCC"),
+    RateNewProd = ee.Image("users/saraheb3/AFSuitabilityTool/RateNewProd"),
+    RateRented = ee.Image("users/saraheb3/AFSuitabilityTool/RateRented"),
+    RateRotGraz = ee.Image("users/saraheb3/AFSuitabilityTool/RateRotGraz"),
+    HiredLabor = ee.Image("users/saraheb3/AFSuitabilityTool/HiredLabor"),
+    NCCPI_IA = ee.Image("users/saraheb3/AFSuitabilityTool/NCCPI_IA"),
+    NCCPI_IL = ee.Image("users/saraheb3/AFSuitabilityTool/NCCPI_IL"),
+    NCCPI_IN = ee.Image("users/saraheb3/AFSuitabilityTool/NCCPI_IN"),
+    NCCPI_KS = ee.Image("users/saraheb3/AFSuitabilityTool/NCCPI_KS"),
+    NCCPI_MI = ee.Image("users/saraheb3/AFSuitabilityTool/NCCPI_MI"),
+    NCCPI_MN = ee.Image("users/saraheb3/AFSuitabilityTool/NCCPI_MN"),
+    NCCPI_MO = ee.Image("users/saraheb3/AFSuitabilityTool/NCCPI_MO"),
+    NCCPI_ND = ee.Image("users/saraheb3/AFSuitabilityTool/NCCPI_ND"),
+    NCCPI_NE = ee.Image("users/saraheb3/AFSuitabilityTool/NCCPI_NE"),
+    NCCPI_OH = ee.Image("users/saraheb3/AFSuitabilityTool/NCCPI_OH"),
+    NCCPI_SD = ee.Image("users/saraheb3/AFSuitabilityTool/NCCPI_SD"),
+    NCCPI_WI = ee.Image("users/saraheb3/AFSuitabilityTool/NCCPI_WI"),
+    AvgNetIncome = ee.Image("users/saraheb3/AFSuitabilityTool/IncomePerAcre"),
+    GSOCunitScaleMW = ee.Image("users/saraheb3/AFSuitabilityTool/GSOCunitScale_31July24"),
+    GloSEMunitScaleMW = ee.Image("users/saraheb3/AFSuitabilityTool/GloSEMunitScale"),
+    GroundNVIunitScaleMW = ee.Image("users/saraheb3/AFSuitabilityTool/GroundNVIunitScale_31July24"),
+    SurfaceNVIunitScaleMW = ee.Image("users/saraheb3/AFSuitabilityTool/SurfaceNVIunitScale"),
+    WEIunitScaleMW = ee.Image("users/saraheb3/AFSuitabilityTool/WEIunitScale"),
+    apple = ee.Image("users/saraheb3/AFSuitabilityTool/1apple_MW_2Aug24"),
+    blackwalnut = ee.Image("users/saraheb3/AFSuitabilityTool/1blackwalnut_MW_2Aug24"),
+    chestnut = ee.Image("users/saraheb3/AFSuitabilityTool/1chestnut_MW_2Aug24"),
+    cottonwood = ee.Image("users/saraheb3/AFSuitabilityTool/1cottonwood_MW_2Aug24"),
+    hazelnut = ee.Image("users/saraheb3/AFSuitabilityTool/1hazelnut_MW_2Aug24"),
+    pecan = ee.Image("users/saraheb3/AFSuitabilityTool/1pecan_MW_2Aug24"),
+    persimmon = ee.Image("users/saraheb3/AFSuitabilityTool/1persimmon_MW_2Aug24"),
+    sycamore = ee.Image("users/saraheb3/AFSuitabilityTool/1sycamore_MW_2Aug24"),
+    whiteoak = ee.Image("users/saraheb3/AFSuitabilityTool/1whiteoak_MW_2Aug24"),
+    table = ee.FeatureCollection("users/saraheb3/AFSuitabilityTool/MidwestCounties_simple"),
+    geometry = /* color: #d63000 */ee.Geometry.MultiPoint();
+
+
+// Load FeatureCollections for counties and watersheds
+var counties = ee.FeatureCollection('TIGER/2018/Counties');
+var watersheds = ee.FeatureCollection('USGS/WBD/2017/HUC08');
+// List of HUC8 values to exclude
+var excludedHUC8s = ['04060200', '04020300', '04080300', '04120200', '04150200'];//Great Lakes
+var exclusionFilter = ee.Filter.inList('huc8', excludedHUC8s);
+
+// Filter the FeatureCollection to exclude these HUC8s
+watersheds = watersheds.filter(exclusionFilter.not());
+
+
+// Create the first dropdown to select region of interest type
+var regionSelect = ui.Select({
+  items: ['All US Midwest', 'State', 'County', 'Watershed'],
+  placeholder: 'Select Region Type',
+  onChange: function(selected) {
+    stateSelect.style().set('shown', false);
+    countyOrWatershedSelect.style().set('shown', false);
+    // Reveal stateSelect when State, County, or Watershed is selected
+    if (selected === 'State') {
+      stateSelect.style().set('shown', true);
+    } else if((selected === 'County' || selected === 'Watershed') && (stateSelect.getValue()==='Select State')){
+        stateSelect.style().set('shown', true);
+        countyOrWatershedSelect.style().set('shown', true);
+    } else if(selected === 'County'){
+        populateCounties(stateSelect.getValue())
+        stateSelect.style().set('shown', true);
+        countyOrWatershedSelect.style().set('shown', true);
+    } else if(selected === 'Watershed'){
+        populateWatersheds(stateSelect.getValue())
+        stateSelect.style().set('shown', true);
+        countyOrWatershedSelect.style().set('shown', true);
+    } else {
+      stateSelect.style().set('shown', false);
+      countyOrWatershedSelect.style().set('shown', false);
+    }
+  },
+  style:{'width': '200px'}
+});
+
+// Create the second dropdown to select state
+var stateSelect = ui.Select({
+  items: ['Illinois', 'Indiana', 'Iowa', 'Kansas', 'Michigan', 'Minnesota', 'Missouri', 'Nebraska', 'North Dakota', 'Ohio', 'South Dakota', 'Wisconsin'],  // Add relevant states
+  placeholder: 'Select State',
+  style: {'width': '200px', shown: false },
+  onChange: function(selectedState) {
+    // Reveal countyOrWatershedSelect depending on what was selected in regionSelect
+    var regionType = regionSelect.getValue();
+    if (regionType === 'County') {
+      populateCounties(selectedState);
+    } else if (regionType === 'Watershed') {
+      populateWatersheds(selectedState);
+    }
+  }
+});
+
+// Function to populate counties for a selected state
+function populateCounties(stateName) {
+  var filteredCounties = counties.filter(ee.Filter.eq('STATEFP', getStateCode(stateName)));
+  
+  // Get the list of counties and sort them alphabetically
+  filteredCounties.aggregate_array('NAME').evaluate(function(countyList) {
+    countyList.sort(); // Sort county names alphabetically
+    countyOrWatershedSelect.items().reset(countyList);
+    countyOrWatershedSelect.setPlaceholder('Select County');
+    countyOrWatershedSelect.style().set('shown', true);
+  });
+}
+
+// Function to populate HUC8 watersheds for a selected state
+function populateWatersheds(stateName) {
+  var filteredWatersheds = watersheds.filter(ee.Filter.stringContains('states', getStateAbbrev(stateName))); // Use the correct property for state filtering
+  // Get the list of names and HUC8s
+  filteredWatersheds.aggregate_array('name').evaluate(function(nameList) {
+    filteredWatersheds.aggregate_array('huc8').evaluate(function(huc8List) {
+      // Combine names and HUC8s into display options
+      var watershedOptions = nameList.map(function(name, index) {
+        var huc8 = huc8List[index];
+        return { label: name + ' (' + huc8 + ')', value: huc8 };
+      });
+
+      // Sort options alphabetically by the label
+      watershedOptions.sort(function(a, b) {
+        return a.label.localeCompare(b.label);
+      });
+      
+      // Populate the dropdown
+      countyOrWatershedSelect.items().reset(watershedOptions);
+      countyOrWatershedSelect.setPlaceholder('Select Watershed');
+      countyOrWatershedSelect.style().set('shown', true);
+    });
+  });
+}
+
+// Create the third dropdown for county or watershed selection
+var countyOrWatershedSelect = ui.Select({
+  placeholder: 'Select County or Watershed',
+  style: {'width': '200px', shown: false }
+});
+
+// Helper function to get state code for counties filtering
+function getStateCode(stateName) {
+  var stateCodes = {
+    'Illinois': '17', 'Indiana': '18', 'Iowa': '19', 'Kansas': '20',
+    'Michigan': '26', 'Minnesota': '27', 'Missouri': '29', 'Nebraska': '31',
+    'North Dakota': '38', 'Ohio': '39', 'South Dakota': '46', 'Wisconsin': '55'
+  };
+  return stateCodes[stateName];
+}
+
+// Helper function to get state code for counties filtering
+function getStateAbbrev(stateName) {
+  var stateAbbrev = {
+    'Illinois': 'IL', 'Indiana': 'IN', 'Iowa': 'IA', 'Kansas': 'KS',
+    'Michigan': 'MI', 'Minnesota': 'MN', 'Missouri': 'MO', 'Nebraska': 'NE',
+    'North Dakota': 'ND', 'Ohio': 'OH', 'South Dakota': 'SD', 'Wisconsin': 'WI'
+  };
+  return stateAbbrev[stateName];
+}
+
+
+// Step 1: Define a dictionary that maps strings to integers
+var practicesToIntMap = {
+  'Alley Cropping': 1,
+  'Riparian Buffers': 2,
+  'Silvopasture': 3,
+  'Windbreaks': 4,
+};
+
+var PracticeSelector = ui.Select({
+  items: Object.keys(practicesToIntMap),  // Get the keys (strings) from the dictionary
+  placeholder: 'Select a Practice',
+  onChange: function() {
+    var selectedString = PracticeSelector.getValue();
+    var integerValue = practicesToIntMap[selectedString];
+    var valuesSet = integerToValuesMap[integerValue];
+    //[WindErosion, WaterErosion, WaterQualSurf, WatQualGrd, SOCpot]
+    subtitleEPv1.setValue('Select weight for wind erodibility index. Default for '+ selectedString + ' is ' + valuesSet[0] + '.');
+    WEIslider.setValue(valuesSet[0]);
+    subtitleEPv2.setValue('Select weight for water erosion index. Default for '+ selectedString + ' is ' + valuesSet[0] + '.');
+    WatEroslider.setValue(valuesSet[1]);
+    subtitleEPv3.setValue('Select weight for surface water quality index. Default for '+ selectedString + ' is ' + valuesSet[0] + '.');
+    WatQualSurfslider.setValue(valuesSet[2]);
+    subtitleEPv4.setValue('Select weight for ground water quality index. Default for '+ selectedString + ' is ' + valuesSet[0] + '.');
+    WatQualGrndslider.setValue(valuesSet[3]);
+    subtitleEPv5.setValue('Select weight for soil organic carbon sequestration potential index. Default for '+ selectedString + ' is ' + valuesSet[0] + '.');
+    SOCslider.setValue(valuesSet[4]);
+    },
+  style:{'width': '200px'}
+});
+
+var applecheckbox = ui.Checkbox('Apple', true);
+var blackwalnutcheckbox = ui.Checkbox('Black Walnut', true);
+var chestnutcheckbox = ui.Checkbox('Chestnut', true);
+var cottonwoodcheckbox = ui.Checkbox('Eastern Cottonwood', true);
+var hazelnutcheckbox = ui.Checkbox('Hazelnut', true);
+var pecancheckbox = ui.Checkbox('Pecan', true);
+var persimmoncheckbox = ui.Checkbox('Persimmon', true);
+var sycamorecheckbox = ui.Checkbox('Sycamore', true);
+var whiteoakcheckbox = ui.Checkbox('White Oak', true);
+
+var conservationcheckbox = ui.Checkbox('Include long-term conservation rate (easements and government programs like CRP)?', true);
+var practicecheckbox = ui.Checkbox('Include short-term conservation practices rate (cover crops, no-till, conservation till)?', false);
+var rotGrazcheckbox = ui.Checkbox('Include rotational grazing rate?', true);
+var rentedcheckbox = ui.Checkbox('Include rate of rented land?', true);
+var beginningcheckbox = ui.Checkbox('Include rate of land operated by beginning farmers (<11 years on any operation)?', true);
+var laborcheckbox = ui.Checkbox('Include number of reported hired labor?', true);
+
+
+var v0 = '0';
+var v1 = '1';
+var v2 = '2';
+var v3 = '3';
+var v4 = '4';
+var v5 = '5';
+
+
+/*var EnvPrioritiestextbox = ui.Select({items: [v0,v1,v2,v3,v4,v5],
+  value: '1', style:{'width': '70px', 'Color': 'darkblue'}});
+var TreeSuitabilitytextbox = ui.Select({items: [v0,v1,v2,v3,v4,v5],
+  value: '1', style:{'width': '70px','Color': 'darkblue'}});
+var SocialFeasibilitytextbox = ui.Select({items: [v0,v1,v2,v3,v4,v5],
+  value: '1', style:{'width': '70px','Color': 'darkblue'}});
+var EconomicViabilitytextbox = ui.Select({items: [v0,v1,v2,v3,v4,v5],
+  value: '1', style:{'width': '70px', 'Color': 'darkblue'}});
+*/
+var EnvPrioritiestextbox = ui.Slider({min:0,max:5,value:1,step:1,style:{'width': '200px', 'Color': 'darkblue'}});
+var TreeSuitabilitytextbox = ui.Slider({min:0,max:5,value:1,step:1,style:{'width': '200px', 'Color': 'darkblue'}});
+var SocialFeasibilitytextbox = ui.Slider({min:0,max:5,value:1,step:1,style:{'width': '200px', 'Color': 'darkblue'}});
+var EconomicViabilitytextbox = ui.Slider({min:0,max:5,value:1,step:1,style:{'width': '200px', 'Color': 'darkblue'}});
+
+
+var practice = 'alley cropping';
+var ACweights = [5,5,3,2,5];
+var integerToValuesMap = {
+  1: [5,5,3,2,5],//[WindErosion, WaterErosion, WaterQualSurf, WatQualGrd, SOCpot]
+  2: [2, 3, 5, 5, 4],
+  3: [3, 4, 3, 2, 3],
+  4: [5, 1, 1, 1, 5],
+};
+var subtitleEPv1 = ui.Label('Select weight for wind erodibility index. Default for ' + practice + ' is ' + ACweights[0] + '. ',{})
+var WEIslider = ui.Slider({min:0,max:10,value:ACweights[0],step:1,style:{'width': '200px', 'Color': 'darkblue'}});
+var subtitleEPv2 = ui.Label('Select weight for water erosion index. Default for ' + practice + ' is ' + ACweights[1] + '. ',{})
+var WatEroslider = ui.Slider({min:0,max:10,value:ACweights[1],step:1,style:{'width': '200px','Color': 'darkblue'}});
+var subtitleEPv3 = ui.Label('Select weight for surface water quality index. Default for ' + practice + ' is ' + ACweights[2] + '. ',{})
+var WatQualSurfslider = ui.Slider({min:0,max:5,value:ACweights[2],step:0.5,style:{'width': '200px', 'Color': 'darkblue'}});
+var subtitleEPv4 = ui.Label('Select weight for ground water quality index. Default for ' + practice + ' is ' + ACweights[3] + '. ',{})
+var WatQualGrndslider = ui.Slider({min:0,max:5,value:ACweights[3],step:0.5,style:{'width': '200px', 'Color': 'darkblue'}});
+var subtitleEPv4v2 = ui.Label('Weight surface water quality and ground water separately or as combined water quality indicator? Combined total water quality indicator takes average of weighted surface water quality index and weighted ground water quality index to weigh overall water quality comparably to the other three indicators.', {})
+var WaterQualcheckbox = ui.Checkbox('Combine to total water quality indicator', true);
+
+/*var subtitleEPv3 = ui.Label('Select weight for water quality index. Default for ' + practice + ' is ' + ACweights[2],{})
+var WatQualSurfslider = ui.Slider({min:0,max:5,value:ACweights[2],step:1,style:{'width': '200px'}});
+var subtitleEPv3 = ui.Label('Consider surface water only, ground water only, or both? Default is both.', {})
+var WaterQualSurfcheckbox = ui.Checkbox('Surface Water Quality', true);
+var WaterQualGrndcheckbox = ui.Checkbox('Ground Water Quality', true);*/
+
+var subtitleEPv5 = ui.Label('Select weight for soil organic carbon sequestration potential index. Default for ' + practice + ' is ' + ACweights[4] + '. ',{})
+var SOCslider = ui.Slider({min:0,max:10,value:ACweights[4],step:1,style:{'width': '200px', 'Color': 'darkblue'}});
+var labelEP = ui.Label({value:'Environmental priority area indicator variables',style:{fontSize:'20px', 'fontWeight': 'bold', 'Color': 'darkblue'}});
+var labelSF = ui.Label({value:'Social feasibility indicator variables',style:{fontSize:'20px', 'fontWeight': 'bold', 'Color': 'darkblue'}});
+var title5 = ui.Label('Set social feasibility indicator variable weights. Each variable is normalized between 0-1 and added together in a weighted linear model to create the indicator. Default is all variables are equally weighted.',{});
+var subtitle5v1 = ui.Label('Select weight for long term conservation practice index (e.g., easemests, CRP).',{});
+var conservationbox = ui.Slider({min:0,max:10,value:1,step:1,style:{'width': '200px', 'Color': 'darkblue'}});
+var subtitle5v2 = ui.Label('Select weight for annual conservation practice index (e.g., cover crops, conservation tillage. Default is zero (excluded) since highly correlated with rate of rented land - only include if you want to weigh these patterns more highly.',{});
+var practicebox = ui.Slider({min:0,max:10,value:0,step:1,style:{'width': '200px', 'Color': 'darkblue'}});
+var subtitle5v3 = ui.Label('Select weight for rotational grazing practice index.',{});
+var rotGrazbox = ui.Slider({min:0,max:10,value:1,step:1,style:{'width': '200px', 'Color': 'darkblue'}});
+var subtitle5v4 = ui.Label('Select weight for rate of rented land index.',{});
+var rentedbox = ui.Slider({min:0,max:10,value:1,step:1,style:{'width': '200px', 'Color': 'darkblue'}});
+var subtitle5v5 = ui.Label('Select weight for rate of new/beginning farmers index (land operated by farmers with <11 year experience on any operation).',{});
+var beginningbox = ui.Slider({min:0,max:10,value:1,step:1,style:{'width': '200px', 'Color': 'darkblue'}});
+var subtitle5v6 = ui.Label('Select weight for index of the number of people employed as hired labor.',{});
+var laborbox = ui.Slider({min:0,max:10,value:1,step:1,style:{'width': '200px', 'Color': 'darkblue'}});
+/*var WEIbox = ui.Select({
+  items: [v0,v1,v2,v3,v4,v5,v6,v7,v8,v9,v10],
+  value: '5',
+  placeholder: 'Select a Practice',
+})
+var WatErobox = ui.Select({
+  items: [v0,v1,v2,v3,v4,v5,v6,v7,v8,v9,v10],
+  value: '5',
+  //placeholder: 'Select a Practice',
+})
+var WatQualbox = ui.Select({
+  items: [v0,v1,v2,v3,v4,v5,v6,v7,v8,v9,v10],
+  value: '5',
+  //placeholder: 'Select a Practice',
+})
+var GSOCbox = ui.Select({
+  items: [v0,v1,v2,v3,v4,v5,v6,v7,v8,v9,v10],
+  value: '5',
+  //placeholder: 'Select a Practice',
+})*/
+/*var WEIbox = ui.Textbox(placeholder: 'Wind Erosion Weight (0-10)');
+var WatErobox = ui.Textbox(placeholder: 'Water Erosion Weight (0-10)');
+var WatQualbox = ui.Textbox(placeholder: 'Water Quality Weight (0-10)');
+var GSOCbox = ui.Textbox(placeholder: 'Soil Organic Carbon Seq Potential Weight (0-10)');*/
+
+var mainPanel = ui.Panel({
+  style: {width: '400px'}
+});
+
+var title = ui.Label({
+  value: 'Agroforestry Suitability Decision Support Tool',
+  style: {'fontSize': '22px', 'color': 'darkblue', 'fontWeight': 'bold'}
+  });
+var subtitle = ui.Label('This tool generates estimates of priority areas for expanding agroforestry in the US Midwest based on environmental, social, and economic criteria. This panel allows users to define input parameters for estimating agroforestry social-ecological suitability. All parameters are set to default parameters, which may be adjusted according to users needs and priorities.', {});
+var label1 = ui.Label({
+  value: 'Region of Interest',
+  style: {'fontSize': '20px', 'color': 'darkblue', 'fontWeight': 'bold'}
+});
+var subtitle1 = ui.Label('Select a region for running the analysis. User ')
+//var subtitle1a = ui.Label({value:'Required', style:{'color:':'red'}});
+var subtitle1a = ui.Label({
+  value: 'Required',
+  style: {'color': 'red', 'height':'25px'}
+});
+var label2 = ui.Label({
+  value: 'Select Agroforestry Practice',
+  style: {'fontSize': '20px', 'color': 'darkblue', 'fontWeight': 'bold'}
+});
+var subtitle2 = ui.Label('Select one agroforestry practice for current analysis.', {});
+var subtitle2a = ui.Label({
+  value: 'Required',
+  style: {'color': 'red', 'height':'25px'}
+});
+//var subtitle2b = ui.Label('NOTE: Changing the practice automatically changes the advanced settings to practice-specific defaults (if changing advanced settings, need to set them after selecting practice and change them each run).', {});
+var label4v1 = ui.Label({
+  value: 'Tree Species Selection',
+  style: {'fontSize': '20px', 'color': 'darkblue', 'fontWeight': 'bold'}
+});
+
+var label3v1 = ui.Label({
+  value: 'Set Indicator Weights',
+  style: {'fontSize': '20px', 'color': 'darkblue', 'fontWeight': 'bold'}
+});
+
+//var subtitle3v1 = ui.Label('Select the weight given to each of the four indicators. Set weights higher for indicators that are higher priorities for determining agroforestry suitability. Default setting weights each of the indicators equally. Example: Agroforestry suitability = weight1*(environmental priorities) + weight2*(tree growth suitability) + weight3*(social feasibility) + weight4*(economic viability). Setting the weight equal to zero means the indicator is omitted.', {});
+var label3 = ui.Label({
+  value: 'Environmental Criteria Weight',
+  style: {'fontWeight': 'bold','fontSize':'15px','height':'25px'}
+});
+//var subtitle3 = ui.Label('The environmental priority area indicator predicts where agroforestry could offer the greatest conservation value in the Midwest based on soil erosion from wind and water, water quality (nitrate violation), and soil organic carbon sequestration potential (see advance setting to change these variables and weights). Select the weight given to environmental priority area indicator.', {});
+var subtitle3v2 = ui.Label('Check which environmental criteria to include in the environmental priority indicator. Unchecked means that the variable is omitted from the analysis.', {});
+var labelWeight1= ui.Label('Set relative weight for environmental priorities indicator 0-5.');
+
+var label4 = ui.Label({
+  value: 'Tree Growth Suitability Weight',
+  style: {'fontWeight': 'bold','fontSize':'15px','height':'25px'}
+});
+//var subtitle4 = ui.Label('The tree growth suitability indicator predicts how many of the selected tree species are suitable for growth in a given location. Tree growth suitability is determined based on soil and climate parameters. Select the weight given to tree growth suitability indicator.', {});
+var subtitle4v2 = ui.Label('Check tree species to include in the tree growth suitability indicator. Unchecked means that the species is omitted from the analysis. Indicator maps the total number of the selected species that are suitability to grow across region.', {});
+var labelWeight2 = ui.Label('Set relative weight for tree growth suitability indicator 0-5.');
+
+var label5 = ui.Label({
+  value: 'Social Feasibility Weight',
+  style: {'fontWeight': 'bold','fontSize':'15px','height':'25px'}
+});
+var labelWeight3 = ui.Label('Set relative weight for social feasibility indicator 0-5.');
+
+//var subtitle5 = ui.Label('The social feasibility indicator predicts which counties are most socially likely to be interested in expanding agroforestry based on current conditions (e.g., rate of conservation currently practiced, rate of rented land, rate of available hired labor, and rate of new/beginning farmers (see advanced settings to adjust variables and weights). Select the weight given to social feasibility indicator. Setting the weight equal to zero means the indicator is omitted.', {});
+//var subtitle5v2 = ui.Label('Check which social criteria to include in the social feasibility indicator. Unchecked means that the variable is omitted from the analysis. Note: Short-term conservation practices rate is highly correlated with rate of rented land - only include both variables if you want these patterns to be weighted highly.', {});
+
+var label6 = ui.Label({
+  value: 'Economic Viability Weight',
+  style: {'fontWeight': 'bold','fontSize':'15px','height':'25px'}
+});
+
+var labelWeight4 = ui.Label('Set relative weight for economic viability indicator 0-5.');
+//var subtitle6 = ui.Label('The economic viability indicator The economic viability indicator assumes that the lands that currently are the most marginal for conventional agriculture are the most economically viable for agroforestry. The indicator predicts where agroforestry is likely to be the most economically viable compared to current agricultural systems. Calculated based on the average net farm income per acre of producers in 2022 (Ag. Census at county-level) and the National Commodity Crop Productivity Index (SSURGO). Select the weight given to economic viability indicator. Setting the weight equal to zero means the indicator is omitted.', {});
+//var subtitle6v2 = ui.Label('Calculated based on the average net farm income per acre of producers in 2022 (Ag. Census at county-level) and the National Commodity Crop Productivity Index (SSURGO).', {});
+
+var contact = ui.Label('Questions? Contact: Sarah Castle saraheb3@illinois.edu or Chloe Wardropper chloew@illinois.edu')
+var userguide = ui.Label({value:'Access the user guide here. (Opens in new tab.)', targetUrl: 'https://zenodo.org/records/14194395'});
+// You can add widgets to the panel
+var dropdownPanel = ui.Panel({
+  layout: ui.Panel.Layout.flow('vertical'),
+});
+mainPanel.add(title);//AF Tool Title
+//mainPanel.add(dropdownPanel);//Panel for main user inputs
+mainPanel.add(subtitle);//AF Tool Description
+//mainPanel.add(label1);//Region of Interest Title
+//mainPanel.add(subtitle1a);//required
+// Create a horizontal panel for the label and button.
+var horizontalPanela = ui.Panel({
+  widgets: [label1, subtitle1a],
+  layout: ui.Panel.Layout.flow('horizontal'),
+  style: {margin: '4px 0'} // Add vertical spacing between rows.
+});
+
+// Add the horizontal panel and tooltip to the main panel.
+mainPanel.add(horizontalPanela); // Add the label and button as one row.
+
+// Create a tooltip (hidden by default).
+var tooltipa = ui.Label('Select the region for which you would like to run your analysis. You may run your analysis for the entire US Midwest region or for a specific state, county, or watershed. To select a county or watershed, you must input the state in which it is located first. Watersheds that cross state bounds will be included in their entirety. NOTE: Large regions may take several minutes to show results since your analysis is being run in real time.');
+tooltipa.style().set({
+  shown: false, // Initially hidden.
+  backgroundColor: 'rgba(255, 255, 255, 0.8)',
+  padding: '10px',
+  border: '1px solid black',
+  position: 'bottom-left'
+});
+
+// Create an info button styled as an icon.
+var infoButtona = ui.Button({
+  label: 'Info', // Info symbol.
+  style: {
+    fontSize: '20px',
+    color: 'blue', // Make the icon stand out.
+    margin: '5px',
+    padding: '2px'
+  },
+  onClick: function() {
+    // Toggle tooltip visibility.
+    var isShown = tooltipa.style().get('shown');
+    tooltipa.style().set('shown', !isShown);
+  }
+});
+
+// Create a horizontal panel for the label and button.
+var horizontalPanela = ui.Panel({
+  widgets: [regionSelect, infoButtona],
+  layout: ui.Panel.Layout.flow('horizontal'),
+  style: {margin: '4px 0'} // Add vertical spacing between rows.
+});
+
+// Add the horizontal panel and tooltip to the main panel.
+mainPanel.add(horizontalPanela); // Add the label and button as one row.
+
+//mainPanel.add(infoButton); // Add the label and button as one row.
+mainPanel.add(tooltipa);         // Add the tooltip (hidden by default).
+
+
+//mainPanel.add(regionSelect);
+mainPanel.add(stateSelect);
+mainPanel.add(countyOrWatershedSelect);
+//dropdownPanel.add(StateSelector);//Select state dropdown
+//mainPanel.add(label2);//Agroforestry Practice Select Title
+// Create a horizontal panel for the label and button.
+var horizontalPanelb = ui.Panel({
+  widgets: [label2, subtitle2a],
+  layout: ui.Panel.Layout.flow('horizontal'),
+  style: {margin: '4px 0'} // Add vertical spacing between rows.
+});
+
+// Add the horizontal panel and tooltip to the main panel.
+mainPanel.add(horizontalPanelb); // Add the label and button as one row.
+
+//mainPanel.add(subtitle2);//AF practice description
+//mainPanel.add(PracticeSelector);//Select AF Practice Dropdown
+//mainPanel.add(subtitle2b);
+
+// Create a tooltip (hidden by default).
+var tooltip0 = ui.Label('Select only ONE agroforestry practice for current analysis. NOTE: Changing the practice automatically changes the advanced settings to practice-specific defaults (if changing advanced settings, need to set them after selecting practice and change them each run).');
+tooltip0.style().set({
+  shown: false, // Initially hidden.
+  backgroundColor: 'rgba(255, 255, 255, 0.8)',
+  padding: '10px',
+  border: '1px solid black',
+  position: 'bottom-left'
+});
+
+// Create an info button styled as an icon.
+var infoButton0 = ui.Button({
+  label: 'Info', // Info symbol.
+  style: {
+    fontSize: '20px',
+    color: 'blue', // Make the icon stand out.
+    margin: '5px',
+    padding: '2px'
+  },
+  onClick: function() {
+    // Toggle tooltip visibility.
+    var isShown = tooltip0.style().get('shown');
+    tooltip0.style().set('shown', !isShown);
+  }
+});
+
+// Create a horizontal panel for the label and button.
+var horizontalPanel0 = ui.Panel({
+  widgets: [PracticeSelector, infoButton0],
+  layout: ui.Panel.Layout.flow('horizontal'),
+  style: {margin: '4px 0'} // Add vertical spacing between rows.
+});
+
+// Add the horizontal panel and tooltip to the main panel.
+mainPanel.add(horizontalPanel0); // Add the label and button as one row.
+
+//mainPanel.add(infoButton); // Add the label and button as one row.
+mainPanel.add(tooltip0);         // Add the tooltip (hidden by default).
+
+
+
+
+
+
+//mainPanel.add(label3v1);//Set indicator weights title
+//Indicator weights description
+// Create a tooltip (hidden by default).
+var tooltip = ui.Label('Select the weight given to each of the four indicators. Set weights higher for indicators that are higher priorities for determining agroforestry suitability. Default setting weights each of the indicators equally. Example: Agroforestry suitability = weight1*(environmental priorities) + weight2*(tree growth suitability) + weight3*(social feasibility) + weight4*(economic viability). Setting the weight equal to zero means the indicator is omitted.');
+tooltip.style().set({
+  shown: false, // Initially hidden.
+  backgroundColor: 'rgba(255, 255, 255, 0.8)',
+  padding: '10px',
+  border: '1px solid black',
+  position: 'bottom-left'
+});
+
+// Create an info button styled as an icon.
+var infoButton = ui.Button({
+  label: 'Click for instructions', // Info symbol.
+  style: {
+    fontSize: '20px',
+    color: 'blue', // Make the icon stand out.
+    margin: '6px',
+    padding: '2px'
+  },
+  onClick: function() {
+    // Toggle tooltip visibility.
+    var isShown = tooltip.style().get('shown');
+    tooltip.style().set('shown', !isShown);
+  }
+});
+
+// Create a horizontal panel for the label and button.
+var horizontalPanel = ui.Panel({
+  widgets: [label3v1, infoButton],
+  layout: ui.Panel.Layout.flow('horizontal'),
+  style: {margin: '4px 0'} // Add vertical spacing between rows.
+});
+
+// Add the horizontal panel and tooltip to the main panel.
+mainPanel.add(horizontalPanel); // Add the label and button as one row.
+
+//mainPanel.add(infoButton); // Add the label and button as one row.
+mainPanel.add(tooltip);         // Add the tooltip (hidden by default).
+
+//Environmental Priority Weights title
+//Env Priorities Description
+// Create a tooltip (hidden by default).
+var tooltip1 = ui.Label('The environmental priority area indicator predicts where agroforestry could offer the greatest conservation value in the Midwest based on soil erosion from wind and water, water quality (nitrate violation), and soil organic carbon sequestration potential (see advance setting to change these variables and weights). Select the relative weight given to environmental priority area indicator, 0-5.');
+tooltip1.style().set({
+  shown: false, // Initially hidden.
+  backgroundColor: 'rgba(255, 255, 255, 0.8)',
+  padding: '10px',
+  border: '1px solid black',
+  position: 'bottom-left'
+});
+
+// Create an info button styled as an icon.
+var infoButton1 = ui.Button({
+  label: 'Info', // Info symbol.
+  style: {
+    fontSize: '20px',
+    color: 'blue', // Make the icon stand out.
+    margin: '0px',
+    padding: '2px'
+  },
+  onClick: function() {
+    // Toggle tooltip visibility.
+    var isShown = tooltip1.style().get('shown');
+    tooltip1.style().set('shown', !isShown);
+  }
+});
+
+// Create a horizontal panel for the label and button.
+var horizontalPanel1 = ui.Panel({
+  widgets: [EnvPrioritiestextbox, infoButton1],
+  layout: ui.Panel.Layout.flow('horizontal'),
+  style: {margin: '4px 0'} // Add vertical spacing between rows.
+});
+
+// Add the horizontal panel and tooltip to the main panel.
+mainPanel.add(label3);
+mainPanel.add(horizontalPanel1); // Add the label and button as one row.
+//mainPanel.add(EnvPrioritiestextbox);
+//mainPanel.add(infoButton1);
+mainPanel.add(tooltip1);         // Add the tooltip (hidden by default).
+
+//mainPanel.add(labelWeight1);//Environmental viability label
+//mainPanel.add(EnvPrioritiestextbox);//Environmental Priorities Weight Textbox
+
+//Tree Growth Suitability Title
+//Tree Growth Suitability Description
+// Create a tooltip (hidden by default).
+var tooltip2 = ui.Label('The tree growth suitability indicator predicts how many of the selected tree species are suitable for growth in a given location. Tree growth suitability is determined based on soil and climate parameters. Select the relative weight given to tree growth suitability indicator, 0-5.');
+tooltip2.style().set({
+  shown: false, // Initially hidden.
+  backgroundColor: 'rgba(255, 255, 255, 0.8)',
+  padding: '10px',
+  border: '1px solid black',
+  position: 'bottom-left'
+});
+
+// Create an info button styled as an icon.
+var infoButton2 = ui.Button({
+  label: 'Info', // Info symbol.
+  style: {
+    fontSize: '20px',
+    color: 'blue', // Make the icon stand out.
+    margin: '0px',
+    padding: '2px',
+    position: 'top-left'
+  },
+  onClick: function() {
+    // Toggle tooltip visibility.
+    var isShown = tooltip2.style().get('shown');
+    tooltip2.style().set('shown', !isShown);
+  }
+});
+
+// Create a horizontal panel for the label and button.
+var horizontalPanel2 = ui.Panel({
+  widgets: [TreeSuitabilitytextbox, infoButton2],
+  layout: ui.Panel.Layout.flow('horizontal'),
+  style: {margin: '4px 0'} // Add vertical spacing between rows.
+});
+
+// Add the horizontal panel and tooltip to the main panel.
+mainPanel.add(label4);
+mainPanel.add(horizontalPanel2); // Add the label and button as one row.
+//mainPanel.add(EnvPrioritiestextbox);
+//mainPanel.add(infoButton1);
+mainPanel.add(tooltip2);         // Add the tooltip (hidden by default).
+
+//mainPanel.add(labelWeight2);//Tree viability label
+//mainPanel.add(TreeSuitabilitytextbox);//Tree Growth Suitability Weight Textbox
+
+//Social Feasibility Title
+//Social Feasibility Description
+// Create a tooltip (hidden by default).
+var tooltip3 = ui.Label('The social feasibility indicator predicts which counties are most socially likely to be interested in expanding agroforestry based on current conditions (e.g., rate of conservation currently practiced, rate of rented land, rate of available hired labor, and rate of new/beginning farmers (see advanced settings to adjust variables and weights). Select the relative weight given to social feasibility indicator, 0-5.');
+tooltip3.style().set({
+  shown: false, // Initially hidden.
+  backgroundColor: 'rgba(255, 255, 255, 0.8)',
+  padding: '10px',
+  border: '1px solid black',
+  position: 'bottom-left'
+});
+
+// Create an info button styled as an icon.
+var infoButton3 = ui.Button({
+  label: 'Info', // Info symbol.
+  style: {
+    fontSize: '20px',
+    color: 'blue', // Make the icon stand out.
+    margin: '0px',
+    padding: '2px'
+  },
+  onClick: function() {
+    // Toggle tooltip visibility.
+    var isShown = tooltip3.style().get('shown');
+    tooltip3.style().set('shown', !isShown);
+  }
+});
+
+
+// Create a horizontal panel for the label and button.
+var horizontalPanel3 = ui.Panel({
+  widgets: [SocialFeasibilitytextbox, infoButton3],
+  layout: ui.Panel.Layout.flow('horizontal'),
+  style: {margin: '4px 0'} // Add vertical spacing between rows.
+});
+
+// Add the horizontal panel and tooltip to the main panel.
+mainPanel.add(label5);
+mainPanel.add(horizontalPanel3); // Add the label and button as one row.
+//mainPanel.add(EnvPrioritiestextbox);
+//mainPanel.add(infoButton1);
+mainPanel.add(tooltip3);         // Add the tooltip (hidden by default).
+
+//mainPanel.add(labelWeight3);//Social viability label
+//mainPanel.add(SocialFeasibilitytextbox);//Social Feasibility Textbox
+
+
+// Create a tooltip (hidden by default).
+var tooltip4 = ui.Label('The economic viability indicator assumes that the lands that currently are the most marginal for conventional agriculture are the most economically viable for agroforestry. The indicator uses data on the current productivity and profitability of agricultural lands and assigns lands with lower profitability in conventional agriculture as more suitable for agroforestry (i.e., where agroforestry is more viable to compete economically). Calculated based on the average net farm income per acre of producers in 2022 (Ag. Census at county-level) and weighted by the National Commodity Crop Productivity Index (SSURGO). Select the relative weight given to economic viability indicator, 0-5.');
+tooltip4.style().set({
+  shown: false, // Initially hidden.
+  backgroundColor: 'rgba(255, 255, 255, 0.8)',
+  padding: '10px',
+  border: '1px solid black',
+  position: 'bottom-left'
+});
+
+// Create an info button styled as an icon.
+var infoButton4 = ui.Button({
+  label: 'Info', // Info symbol.
+  style: {
+    fontSize: '20px',
+    color: 'blue', // Make the icon stand out.
+    margin: '0px',
+    padding: '2px'
+  },
+  onClick: function() {
+    // Toggle tooltip visibility.
+    var isShown = tooltip4.style().get('shown');
+    tooltip4.style().set('shown', !isShown);
+  }
+});
+
+
+// Create a horizontal panel for the label and button.
+var horizontalPanel4 = ui.Panel({
+  widgets: [EconomicViabilitytextbox, infoButton4],
+  layout: ui.Panel.Layout.flow('horizontal'),
+  style: {margin: '4px 0'} // Add vertical spacing between rows.
+});
+
+// Add the horizontal panel and tooltip to the main panel.
+mainPanel.add(label6);
+mainPanel.add(horizontalPanel4); // Add the label and button as one row.
+//mainPanel.add(EnvPrioritiestextbox);
+//mainPanel.add(infoButton1);
+mainPanel.add(tooltip4);         // Add the tooltip (hidden by default).
+
+//dropdownPanel.add(infoButton);
+//dropdownPanel.add(tooltip);
+
+//dropdownPanel.add(subtitle6v2);
+//mainPanel.add(labelWeight4);//Economic viability label
+//mainPanel.add(EconomicViabilitytextbox);//Economic viability textbox
+
+// Create a panel, initially hidden.
+var dropdownPanel2 = ui.Panel({
+  style: {
+    width: '300px',
+    shown: false
+  },
+  widgets: [
+    ui.Label('Set weights for specific variables used in the environmental priority area, tree species suitability, and social feasibility indicators.')
+  ]
+});
+
+
+// Create a button to unhide the panel.
+var button2 = ui.Button({
+  label: 'Open advanced settings',
+  onClick: function() {
+    // Hide the button.
+    //button2.style().set('shown', false);
+    // Display the panel.
+    dropdownPanel2.style().set('shown', true);
+    
+    }
+   
+});
+
+// Add the button to the map and the panel to root.
+mainPanel.add(button2);
+ui.root.insert(0, dropdownPanel2);
+
+
+//Advanced uses
+dropdownPanel2.add(labelEP);
+dropdownPanel2.add(subtitleEPv1);
+dropdownPanel2.add(WEIslider);
+dropdownPanel2.add(subtitleEPv2);
+dropdownPanel2.add(WatEroslider);
+dropdownPanel2.add(subtitleEPv5);
+dropdownPanel2.add(SOCslider);
+dropdownPanel2.add(subtitleEPv3);
+dropdownPanel2.add(WatQualSurfslider);
+dropdownPanel2.add(subtitleEPv4);
+dropdownPanel2.add(WatQualGrndslider);
+dropdownPanel2.add(subtitleEPv4v2);
+dropdownPanel2.add(WaterQualcheckbox);
+
+dropdownPanel2.add(label4v1);//Tree Species Selection Title
+dropdownPanel2.add(subtitle4v2);//Tree species selection description
+dropdownPanel2.add(applecheckbox);//Apple checkbox
+dropdownPanel2.add(blackwalnutcheckbox);//Black walnut checkbox
+dropdownPanel2.add(chestnutcheckbox);//Chestnut checkbox
+dropdownPanel2.add(cottonwoodcheckbox);//Eastern cottonwood checkbox
+dropdownPanel2.add(hazelnutcheckbox); //Hazelnut checkbox
+dropdownPanel2.add(pecancheckbox); //Pecan checkbox
+dropdownPanel2.add(persimmoncheckbox); //Persimmon checkbox
+dropdownPanel2.add(sycamorecheckbox); //Sycamore checkbox
+dropdownPanel2.add(whiteoakcheckbox); //White oak checkbox
+
+dropdownPanel2.add(labelSF);
+dropdownPanel2.add(title5);
+dropdownPanel2.add(subtitle5v1);
+dropdownPanel2.add(conservationbox);
+//dropdownPanel2.add(subtitle5v2);
+//dropdownPanel2.add(practicebox);
+dropdownPanel2.add(subtitle5v3);
+dropdownPanel2.add(rotGrazbox);
+dropdownPanel2.add(subtitle5v4);
+dropdownPanel2.add(rentedbox);
+dropdownPanel2.add(subtitle5v5);
+dropdownPanel2.add(beginningbox);
+dropdownPanel2.add(subtitle5v6);
+dropdownPanel2.add(laborbox);
+
+var button3 =ui.Button({
+      label: 'Close advanced settings',
+      onClick: function(){
+        dropdownPanel2.style().set('shown', false);
+      }
+    })
+dropdownPanel2.add(button3);
+
+
+//Create global variable to export image
+var SESsuitabilityunitScale;
+
+var runAnalysis = function() {
+  Map.clear();
+  //var stateUI = StateSelector.getValue();
+  var regionType = regionSelect.getValue();
+  var stateUI = stateSelect.getValue();
+  var countyWatershedUI = countyOrWatershedSelect.getValue();
+  
+  var practice = PracticeSelector.getValue();
+  var EnvPrioritiesWeight = Number(EnvPrioritiestextbox.getValue());
+  print('EnvPrioritiesWeight: '+EnvPrioritiestextbox.getValue());
+  var treeSuitWeight = Number(TreeSuitabilitytextbox.getValue());
+  print('treeSuitWeight: '+TreeSuitabilitytextbox.getValue());
+  var socialFeasWeight = Number(SocialFeasibilitytextbox.getValue());
+  print('socialFeasWeight: '+SocialFeasibilitytextbox.getValue());
+  var econViabilityWeight = Number(EconomicViabilitytextbox.getValue());
+  print('econViabilityWeight: '+EconomicViabilitytextbox.getValue());
+
+  var weightWindErosion = Number(WEIslider.getValue());
+  var weightWaterErosion = Number(WatEroslider.getValue());
+  var weightSOCpot = Number(SOCslider.getValue());
+  var weightSurfaceNVI = Number(WatQualSurfslider.getValue());
+  var weightGroundNVI = Number(WatQualGrndslider.getValue());
+  var totalWaterQualBool = WaterQualcheckbox.getValue();
+  
+  var weightConservation = Number(conservationbox.getValue());
+  var weightRotGraz = Number(rotGrazbox.getValue());
+  var weightRented = Number(rentedbox.getValue());
+  var weightBeginning = Number(beginningbox.getValue());
+  var weightLabor = Number(laborbox.getValue());
+  
+  var appleBool = applecheckbox.getValue() ? 1 : 0;
+  var blackWalnutBool = blackwalnutcheckbox.getValue() ? 1 : 0;
+  var chestnutBool = chestnutcheckbox.getValue() ? 1 : 0;
+  var cottonwoodBool = cottonwoodcheckbox.getValue() ? 1 : 0;
+  var hazelnutBool = hazelnutcheckbox.getValue() ? 1 : 0;
+  var pecanBool = pecancheckbox.getValue() ? 1 : 0;
+  var persimmonBool = persimmoncheckbox.getValue() ? 1 : 0;
+  var sycamoreBool = sycamorecheckbox.getValue() ? 1 : 0;
+  var whiteOakBool = whiteoakcheckbox.getValue() ? 1 : 0;
+  
+  print(practice);
+  
+  var state; 
+  //If all Midwest == true
+  if(regionType==='All US Midwest'){
+    var lis = ee.List(['Illinois', 'Indiana', 'Iowa', 'Kansas', 'Michigan', 'Minnesota', 'Missouri', 'Nebraska', 'North Dakota', 'Ohio', 'South Dakota', 'Wisconsin']); //North Central Region
+    //var state = ee.FeatureCollection('FAO/GAUL/2015/level1').filter(ee.Filter.equals('ADM1_NAME', statename));
+    state = ee.FeatureCollection('FAO/GAUL_SIMPLIFIED_500m/2015/level1').filter(ee.Filter.inList('ADM1_NAME', lis));
+  } else if(regionType==='State'){
+      state = ee.FeatureCollection('FAO/GAUL_SIMPLIFIED_500m/2015/level1').filter(ee.Filter.equals('ADM1_NAME', stateUI));
+  } else if(regionType==='County'){
+      var temp  = ee.FeatureCollection('TIGER/2018/Counties').filter(ee.Filter.equals('STATEFP', getStateCode(stateUI)));
+      state = temp.filter(ee.Filter.equals('NAME', countyWatershedUI));
+  } else if(regionType==='Watershed'){
+      //var temp2  = ee.FeatureCollection('USGS/WBD/2017/HUC08').filter(ee.Filter.equals('states', getStateAbbrev(stateUI)));
+      //state = temp2.filter(ee.Filter.equals('huc8', countyWatershedUI));
+      state = ee.FeatureCollection('USGS/WBD/2017/HUC08').filter(ee.Filter.equals('huc8', countyWatershedUI));
+  } else{
+    
+  }
+  
+  Map.centerObject(state);
+  Map.addLayer(state, {}, 'State');
+  
+  var visualization = {
+    min: 0,
+    max: 1,
+    palette: ['red', 'orange','yellow', 'green','blue']
+  };
+  /*Map.addLayer(GSOCunitScale,visualization,'unitGSOCpot',false);
+  Map.addLayer(GloSEMunitScale,visualization,'GloSEMunitScale',false);
+  Map.addLayer(GroundNVIunitScale,visualization,'GroundNVIunitScale',false);
+  Map.addLayer(SurfaceNVIunitScale,visualization,'SurfaceNVIunitScale',false);
+  Map.addLayer(WEIunitScale,visualization,'WEIunitScale',false);*/
+  
+  
+  var riparianarea = ee.ImageCollection([Riparian_IA, Riparian_IL, Riparian_IN, Riparian_KS, Riparian_MI, Riparian_MN, Riparian_MO, Riparian_ND, Riparian_NE, Riparian_OH, Riparian_SD, Riparian_WI]).mosaic();
+  //Map.addLayer(riparianarea);
+  var fieldBuffers = ee.ImageCollection([FieldBuffer_IA, FieldBuffer_IL, FieldBuffer_IN, FieldBuffer_KS, FieldBuffer_MI, FieldBuffer_MN, FieldBuffer_MO, FieldBuffer_ND, FieldBuffer_NE, FieldBuffer_OH, FieldBuffer_SD, FieldBuffer_WI]).mosaic();
+  //Map.addLayer(fieldBuffers);
+  
+  /*Map.addLayer(apple,visualization,'apple');
+  Map.addLayer(blackwalnut,visualization,'blackwalnut');
+  Map.addLayer(chestnut,visualization,'chestnut');
+  Map.addLayer(cottonwood,visualization,'cottonwood');
+  Map.addLayer(hazelnut,visualization,'hazelnut');
+  Map.addLayer(pecan,visualization,'pecan');
+  Map.addLayer(persimmon,visualization,'persimmon');
+  Map.addLayer(sycamore,visualization,'sycamore');
+  Map.addLayer(whiteoak,visualization,'whiteoak');*/
+  
+  var NCCPI = ee.ImageCollection([NCCPI_IA, NCCPI_IL, NCCPI_IN, NCCPI_KS, NCCPI_MI, NCCPI_MN, NCCPI_MO, NCCPI_ND, NCCPI_NE, NCCPI_OH, NCCPI_SD, NCCPI_WI]).mosaic();
+  NCCPI = NCCPI.divide(1000);
+  //Map.addLayer(NCCPI,visualization,'NCCPI');
+  
+
+  //Agricultural lands
+  //NASS Cropland Data Layer
+  var CDL = ee.ImageCollection('USDA/NASS/CDL')
+                    .filter(ee.Filter.date('2022-01-01', '2023-01-01'))
+                    .first().clip(state.geometry());
+  var cropLandcover = CDL.select('cropland');
+  var CDLcrops = cropLandcover.lte(61).or(cropLandcover.gte(205).and(cropLandcover.lte(209))).or((cropLandcover.gte(213)).and((cropLandcover.neq(215)).and(cropLandcover.neq(217)).and(cropLandcover.neq(218)).and(cropLandcover.neq(220)).and(cropLandcover.neq(223)))); //cultivated annual crops, not tree crops
+  var CDLpasture = cropLandcover.eq(176);
+  var CDLag = CDLcrops.or(CDLpasture);
+  var CDLtreecrops = (cropLandcover.gte(66).and(cropLandcover.lte(77))).or(cropLandcover.eq(204)).or(cropLandcover.gte(210).and(cropLandcover.lte(212))).or(cropLandcover.eq(215)).or(cropLandcover.eq(217)).or(cropLandcover.eq(218)).or(cropLandcover.eq(220)).or(cropLandcover.eq(223));
+  //Map.addLayer(cropLandcover, visualization254, 'Crop Landcover');
+  //Map.addLayer(CDLpasture.selfMask(),{palette:'orange'},'CDLpasture');
+  //Map.addLayer(CDLag.selfMask(),{palette:'orange'},'CDLag',false);
+  var ESA_WC = ee.ImageCollection('ESA/WorldCover/v200').first();
+  var ESA_WC_nforests = ESA_WC.neq(10).selfMask();
+  //Map.addLayer(ESA_WC_forests);
+  var CDLag_mask = CDLag.mask(ESA_WC_nforests).clip(state.geometry());
+  var CDLpasture_mask = CDLpasture.mask(ESA_WC_nforests).clip(state.geometry());
+  
+  if (practice==='Alley Cropping'){
+    var constraint = CDLag_mask;
+  }
+  if (practice==='Riparian Buffers'){
+    var constraint = riparianarea;
+  }
+  if (practice==='Silvopasture'){
+    var constraint = CDLpasture_mask;
+  }
+  if (practice==='Windbreaks'){
+    var constraint = fieldBuffers;
+  }
+ 
+  //Environmental Priorities
+  var GSOCseq1 = GSOCseq.clip(state.geometry());
+  var GroundNVI1 = GroundNVI.clip(state.geometry());
+  var SurfaceNVI1 = SurfaceNVI.clip(state.geometry());
+  var GloSEM1 = GloSEM.clip(state.geometry());
+  var wind_erodibility_index1 = ee.Image('projects/earthengine-legacy/assets/projects/sat-io/open-datasets/CSRL_soil_properties/land_use/wind_erodibility_index').clip(state.geometry());
+  
+  if(regionType==='All US Midwest'){
+    var GSOCunitScale = GSOCunitScaleMW;
+    var GroundNVIunitScale = GroundNVIunitScaleMW;
+    var SurfaceNVIunitScale = SurfaceNVIunitScaleMW;
+    var GloSEMunitScale = GloSEMunitScaleMW;
+    var WEIunitScale = WEIunitScaleMW;
+   
+  } else{
+    //Map.addLayer(GSOCseq); //import soil organic carbon sequestration potential data layer
+    var GSOC_perc = GSOCseq1.reduceRegion({reducer:ee.Reducer.percentile([5, 95]), geometry:state.geometry(), scale:1000, maxPixels:1e13});
+    // use unit scale to normalize the pixel values
+    var GSOCunitScale = GSOCseq1.unitScale(ee.Number(GSOC_perc.get('b1_p5')), ee.Number(GSOC_perc.get('b1_p95'))).unmask(ee.Image(0)).clamp(0,1);
+  
+    //Map.addLayer(GroundNVI);
+    var GroundNVI_perc = GroundNVI1.reduceRegion({reducer:ee.Reducer.percentile([5, 95]), geometry:state.geometry(), scale:1000, maxPixels:1e13});
+    // use unit scale to normalize the pixel values
+    var GroundNVIunitScale = GroundNVI1.unitScale(ee.Number(GroundNVI_perc.get('b1_p5')), ee.Number(GroundNVI_perc.get('b1_p95'))).unmask(ee.Image(0)).clamp(0,1);
+  
+    //Map.addLayer(SurfaceNVI);
+    var SurfaceNVI_perc = SurfaceNVI1.reduceRegion({reducer:ee.Reducer.percentile([5, 95]), geometry:state.geometry(), scale:1000, maxPixels:1e13});
+    // use unit scale to normalize the pixel values
+    var SurfaceNVIunitScale = SurfaceNVI1.unitScale(ee.Number(SurfaceNVI_perc.get('b1_p5')), ee.Number(SurfaceNVI_perc.get('b1_p95'))).unmask(ee.Image(0)).clamp(0,1);
+  
+    //Map.addLayer(GloSEM);
+    var GloSEM_perc = GloSEM1.reduceRegion({reducer:ee.Reducer.percentile([5, 95]), geometry:state.geometry(), scale:1000, maxPixels:1e13});
+    // use unit scale to normalize the pixel values
+    var GloSEMunitScale = GloSEM1.unitScale(ee.Number(GloSEM_perc.get('b1_p5')), ee.Number(GloSEM_perc.get('b1_p95'))).unmask(ee.Image(0)).clamp(0,1);
+   
+    //Map.addLayer(wind_erodibility_index);
+    var wind_erodibility_index_perc = wind_erodibility_index1.reduceRegion({reducer:ee.Reducer.percentile([5, 95]), geometry:state.geometry(), scale:1000, maxPixels:1e13});
+    // use unit scale to normalize the pixel values
+    var WEIunitScale = wind_erodibility_index1.unitScale(ee.Number(wind_erodibility_index_perc.get('b1_p5')), ee.Number(wind_erodibility_index_perc.get('b1_p95'))).unmask(ee.Image(0)).clamp(0,1);
+  
+};
+  
+    //Social feasibility
+    var RateAgCons_EaseGovt1 = RateAgCons_EaseGovt.clip(state.geometry())
+    var RateConsPrac_TillCC1 = RateConsPrac_TillCC.clip(state.geometry());
+    var RateNewProd1 = RateNewProd.clip(state.geometry());
+    var RateRented1 = RateRented.clip(state.geometry());
+    var RateRotGraz1 = RateRotGraz.clip(state.geometry());
+    var HiredLabor1 = HiredLabor.clip(state.geometry());
+  
+    //RateAgCons_EaseGovt
+    var RateAgCons_EaseGovt_perc = RateAgCons_EaseGovt1.reduceRegion({reducer:ee.Reducer.percentile([5, 95]), geometry:state.geometry(), scale:1000, maxPixels:1e13});
+    // use unit scale to normalize the pixel values
+    var RateAgCons_EaseGovtunitScale = RateAgCons_EaseGovt1.unitScale(ee.Number(RateAgCons_EaseGovt_perc.get('b1_p5')), ee.Number(RateAgCons_EaseGovt_perc.get('b1_p95'))).clamp(0,1);
+   
+    //RateConsPrac_TillCC
+    var RateConsPrac_TillCC_perc = RateConsPrac_TillCC1.reduceRegion({reducer:ee.Reducer.percentile([5, 95]), geometry:state.geometry(), scale:1000, maxPixels:1e13});
+    // use unit scale to normalize the pixel values
+    var RateConsPrac_TillCCunitScale = RateConsPrac_TillCC1.unitScale(ee.Number(RateConsPrac_TillCC_perc.get('b1_p5')), ee.Number(RateConsPrac_TillCC_perc.get('b1_p95'))).clamp(0,1);
+    //Map.addLayer(RateConsPrac_TillCCunitScale,visualization,'unitRateConsPrac_TillCC',false);
+    
+    //RateNewProd
+    var RateNewProd_perc = RateNewProd1.reduceRegion({reducer:ee.Reducer.percentile([5, 95]), geometry:state.geometry(), scale:1000, maxPixels:1e13});
+    // use unit scale to normalize the pixel values
+    var RateNewProdunitScale = RateNewProd1.unitScale(ee.Number(RateNewProd_perc.get('b1_p5')), ee.Number(RateNewProd_perc.get('b1_p95'))).clamp(0,1);
+    //Map.addLayer(RateNewProdunitScale,visualization,'unitRateNewProd',false);
+    
+    //RateRented
+    RateRented1 = RateRented1.multiply(-1);
+    var RateRented_perc = RateRented1.reduceRegion({reducer:ee.Reducer.percentile([5, 95]), geometry:state.geometry(), scale:1000, maxPixels:1e13});
+    // use unit scale to normalize the pixel values
+    var RateRentedunitScale = RateRented1.unitScale(ee.Number(RateRented_perc.get('b1_p5')), ee.Number(RateRented_perc.get('b1_p95'))).clamp(0,1);
+    //Map.addLayer(RateRentedunitScale,visualization,'unitRateRented',false);
+    
+    //RateRotGraz
+    var RateRotGraz_perc = RateRotGraz1.reduceRegion({reducer:ee.Reducer.percentile([5, 95]), geometry:state.geometry(), scale:1000, maxPixels:1e13});
+    // use unit scale to normalize the pixel values
+    var RateRotGrazunitScale = RateRotGraz1.unitScale(ee.Number(RateRotGraz_perc.get('b1_p5')), ee.Number(RateRotGraz_perc.get('b1_p95'))).clamp(0,1);
+    //Map.addLayer(RateRotGrazunitScale,visualization,'unitRateRotGraz',false);
+    
+    //HiredLabor 
+    var HiredLabor_perc = HiredLabor1.reduceRegion({reducer:ee.Reducer.percentile([5, 95]), geometry:state.geometry(), scale:1000, maxPixels:1e13});
+    // use unit scale to normalize the pixel values
+    var HiredLaborunitScale = HiredLabor1.unitScale(ee.Number(HiredLabor_perc.get('b1_p5')), ee.Number(HiredLabor_perc.get('b1_p95'))).clamp(0,1);
+    //Map.addLayer(HiredLaborunitScale,visualization,'unitHiredLabor',false);
+  
+  
+  var NCCPI1 = NCCPI.clip(state.geometry());
+  //Economic feasibility
+  var income = AvgNetIncome.multiply(NCCPI1);
+  var visualizationInc = {
+    min: 0,
+    max: 400,
+    palette: ['red', 'orange','yellow', 'green','blue']
+  };
+  //Map.addLayer(income,visualizationInc,'income');
+  
+
+  
+  //print('totalWaterQualBool: '+totalWaterQualBool);
+  if(totalWaterQualBool===true){
+    weightSurfaceNVI = weightSurfaceNVI/2;
+    weightGroundNVI = weightGroundNVI/2;
+  }
+  //print(weightGroundNVI); //test
+
+  var palettes = require('users/gena/packages:palettes');
+  var palette = palettes.matplotlib.viridis[7];
+  var visualization = {
+    min: 0.0,
+    max: 1.0,
+    palette: palette
+  };
+  
+  var weightEnvPriorityAreas = (GloSEMunitScale.multiply(weightWaterErosion)).add((WEIunitScale.multiply(weightWindErosion))).add((GSOCunitScale.multiply(weightSOCpot))).add((SurfaceNVIunitScale.multiply(weightSurfaceNVI))).add((GroundNVIunitScale.multiply(weightGroundNVI)));
+  var totalEnvWeights = weightWaterErosion+weightWindErosion+weightSOCpot+weightSurfaceNVI+weightGroundNVI;
+  //print(totalEnvWeights);
+  var envPriorityAreasNorm = weightEnvPriorityAreas.divide(totalEnvWeights).selfMask();
+  //Map.addLayer(envPriorityAreasNorm,visualization,'envPriorityAreasNorm',false);
+  
+  var envPriority_perc = envPriorityAreasNorm.reduceRegion({reducer:ee.Reducer.percentile([5, 95]), geometry:state.geometry(), scale:1000, maxPixels:1e13});
+  //print(envPriority_perc)
+  // use unit scale to normalize the pixel values
+  var envPriorityunitScale = envPriorityAreasNorm.unitScale(ee.Number(envPriority_perc.get('b1_p5')), ee.Number(envPriority_perc.get('b1_p95'))).clamp(0,1);
+  //Map.addLayer(envPriorityunitScale,visualization,'envPriorityunitScale',false);
+  
+ 
+  //Tree Growth Suitability
+  var suitableTrees = (apple.multiply(appleBool)).add(blackwalnut.multiply(blackWalnutBool)).add(chestnut.multiply(chestnutBool)).add(hazelnut.multiply(hazelnutBool)).add(pecan.multiply(pecanBool)).add(persimmon.multiply(persimmonBool)).add(cottonwood.multiply(cottonwoodBool)).add(sycamore.multiply(sycamoreBool)).add(whiteoak.multiply(whiteOakBool));
+  suitableTrees = suitableTrees.clip(state.geometry());
+  var suitableTreesNorm = suitableTrees.divide(9);
+  //Map.addLayer(suitableTreesNorm,visualization,'suitableTreesNorm',false);
+  
+  
+  //Social Feasibility
+if (regionType === 'State' || regionType === 'All US Midwest' || regionType === 'Watershed') {
+
+  var socialFeasibility = (RateAgCons_EaseGovtunitScale.multiply(weightConservation)).add(RateNewProdunitScale.multiply(weightBeginning)).add(RateRentedunitScale.multiply(weightRented)).add(HiredLaborunitScale.multiply(weightLabor)).add(RateRotGrazunitScale.multiply(weightRotGraz));
+  var socialFeasibilityNorm = socialFeasibility.divide(5);
+  //Map.addLayer(socialFeasibilityNorm,visualization,'socialFeasibilityNorm',false);
+  
+  
+  var socialFeasibility_perc = socialFeasibilityNorm.reduceRegion({reducer:ee.Reducer.percentile([5, 95]), geometry:state.geometry(), scale:1000, maxPixels:1e13});
+  //print(socialFeasibility_perc)
+  // use unit scale to normalize the pixel values
+  var socialFeasibilityunitScale = socialFeasibilityNorm.unitScale(ee.Number(socialFeasibility_perc.get('b1_p5')), ee.Number(socialFeasibility_perc.get('b1_p95'))).clamp(0,1);
+  //Map.addLayer(socialFeasibilityunitScale,visualization,'socialFeasibilityunitScale',false);
+  
+} else{
+  var socialFeasibilityunitScale = ee.Image.constant(0).clip(state.geometry());
+}  
+  //Economic Feasibility
+  //income
+  income = income.multiply(-1);
+  var income_perc = income.reduceRegion({reducer:ee.Reducer.percentile([5, 95]), geometry:state.geometry(), scale:1000, maxPixels:1e13});
+  //print(income_perc)
+  // use unit scale to normalize the pixel values
+  var incomeunitScale = income.unitScale(ee.Number(income_perc.get('b1_p5')), ee.Number(income_perc.get('b1_p95'))).clamp(0,1);
+  //Map.addLayer(incomeunitScale,visualization,'incomeunitScale',false);
+  
+  Map.addLayer(constraint,visualization,'Practice Constraint (Relevant Ag Lands)',false);
+  Map.addLayer(envPriorityunitScale.multiply(EnvPrioritiesWeight),visualization,'Environmental Priorities Indicator',false);
+  Map.addLayer(suitableTreesNorm.multiply(treeSuitWeight),visualization,'Tree Growth Suitability (Proportion of Selected Species)',false);
+  Map.addLayer(socialFeasibilityunitScale.multiply(socialFeasWeight),visualization,'Social Feasibility Indicator',false);
+  Map.addLayer(incomeunitScale.multiply(econViabilityWeight),visualization,'Economic Viability Indicator',false);
+
+  //var socialEcologicalSuitability = constraint.multiply(envPriorityunitScale).multiply(suitableTreesNorm).multiply(socialFeasibilityunitScale).multiply(incomeunitScale).unmask(ee.Image(0)).clip(state.geometry());
+  var socialEcologicalSuitability = constraint.multiply((envPriorityunitScale.multiply(EnvPrioritiesWeight)).add(suitableTreesNorm.multiply(treeSuitWeight)).add(socialFeasibilityunitScale.multiply(socialFeasWeight)).add(incomeunitScale.multiply(econViabilityWeight))).selfMask();
+  //socialEcologicalSuitability = socialEcologicalSuitability.multiply(100);
+  //Map.addLayer(socialEcologicalSuitability,visualization,'Overall Agroforestry Suitability');
+  var socialEcologicalSuitability_perc = socialEcologicalSuitability.reduceRegion({reducer:ee.Reducer.percentile([5, 95]), geometry:state.geometry(), scale:1000, maxPixels:1e13});
+  if(practice==='Alley Cropping'){
+    var oldKeys = ['cropland_p5', 'cropland_p95'];  // Adjust based on your band name
+    var newKeys = ['constant_p5', 'constant_p95'];  // Desired new keys
+    socialEcologicalSuitability_perc = socialEcologicalSuitability_perc.rename(oldKeys, newKeys);
+  }
+  if(practice==='Silvopasture'){
+    var oldKeys = ['cropland_p5', 'cropland_p95'];  // Adjust based on your band name
+    var newKeys = ['constant_p5', 'constant_p95'];  // Desired new keys
+    socialEcologicalSuitability_perc = socialEcologicalSuitability_perc.rename(oldKeys, newKeys);
+  }
+  //print(socialEcologicalSuitability_perc);
+  SESsuitabilityunitScale = socialEcologicalSuitability.unitScale(ee.Number(socialEcologicalSuitability_perc.get('constant_p5')), ee.Number(socialEcologicalSuitability_perc.get('constant_p95'))).clamp(0,1); //RB,WB constant, AC,SP cropland
+  Map.addLayer(SESsuitabilityunitScale,visualization,'Overall Agroforestry Suitability');
+  
+  var SEStop = socialEcologicalSuitability.gte(1).selfMask();
+  Map.addLayer(SEStop,visualization,'Highest Suitability Areas (Overall Suitability = 1)',false);
+  /*
+  //Map.addLayer(table);
+  var pixelArea = ee.Image.pixelArea();
+  var agroforestArea = pixelArea.updateMask(SEStop);
+  
+  var area = agroforestArea.reduceRegions({ //generate sum of top suitable areas for each country
+      collection: table,
+      reducer: ee.Reducer.sum(),
+      scale: 30,  
+      crs: 'EPSG:4326', // world wide crs 
+      tileScale:16 //set to 16 to avoid processing limitations
+    });
+  
+  //var squareMeters = sumHabitatLoss.getNumber('area');
+  //var squareKilometers = squareMeters.divide(1e6);
+  print(area);//sq m
+  
+  Export.table.toDrive({
+    collection: area,
+    folder: 'AFsuitability',
+    description:'WindbreaksSEStop1AreabyCounty30m_29Aug24',
+    fileFormat: 'CSV'
+  });*/
+  
+};
+
+/*
+ * Legend setup
+ */
+
+// Creates a color bar thumbnail image for use in legend from the given color
+// palette.
+function makeColorBarParams(palette) {
+  return {
+    bbox: [0, 0, 1, 0.1],
+    dimensions: '100x10',
+    format: 'png',
+    min: 0,
+    max: 1,
+    palette: palette,
+  };
+}
+var palettes = require('users/gena/packages:palettes');
+  var palette = palettes.matplotlib.viridis[7];
+  var visualization = {
+    min: 0.0,
+    max: 1.0,
+    palette: palette
+  };
+// Create the color bar for the legend.
+var colorBar = ui.Thumbnail({
+  image: ee.Image.pixelLonLat().select(0),
+  params: makeColorBarParams(visualization.palette),
+  style: {stretch: 'horizontal', margin: '0px 8px', maxHeight: '24px'},
+});
+
+// Create a panel with three numbers for the legend.
+var legendLabels = ui.Panel({
+  widgets: [
+    ui.Label(visualization.min, {margin: '4px 8px'}),
+    ui.Label(
+        ((visualization.max-visualization.min) / 2+visualization.min),
+        {margin: '4px 8px', textAlign: 'center', stretch: 'horizontal'}),
+    ui.Label((visualization.max), {margin: '4px 8px'})
+  ],
+  layout: ui.Panel.Layout.flow('horizontal')
+});
+
+var legendTitle = ui.Label({
+  value: 'Agroforestry Suitability (0 = lowest, 1 = highest)',
+  style: {fontWeight: 'bold'}
+});
+
+// Add the legendPanel to the map.
+var legendPanel = ui.Panel([legendTitle, colorBar, legendLabels]);
+
+var button = ui.Button({
+  label: 'Click to Run',
+  onClick: function() {
+  // Then run the analysis function
+   runAnalysis();
+   Map.add(legendPanel);
+
+  }
+});
+//Map.add(button);
+mainPanel.add(button)
+/*
+function exportToDrive() {
+  var stateUI = StateSelector.getValue();
+
+  //If all Midwest == true
+  if(stateUI==='Entire US Midwest (all states)'){
+    var lis = ee.List(['Illinois', 'Indiana', 'Iowa', 'Kansas', 'Michigan', 'Minnesota', 'Missouri', 'Nebraska', 'North Dakota', 'Ohio', 'South Dakota', 'Wisconsin']); //North Central Region
+    //var state = ee.FeatureCollection('FAO/GAUL/2015/level1').filter(ee.Filter.equals('ADM1_NAME', statename));
+    var state = ee.FeatureCollection('FAO/GAUL_SIMPLIFIED_500m/2015/level1').filter(ee.Filter.inList('ADM1_NAME', lis));
+  } else {
+    var state = ee.FeatureCollection('FAO/GAUL_SIMPLIFIED_500m/2015/level1').filter(ee.Filter.equals('ADM1_NAME', stateUI));
+  };
+  
+  if (!SESsuitabilityunitScale) {
+    print('No image to export. Run the analysis first.');
+    return;
+  }
+    Export.image.toDrive({
+    image: SESsuitabilityunitScale,
+    description: 'SESsuitabilityunitScale',  // Name of the task
+    folder: 'AgroforestrySuitabilityTool_Exports',          // Optional folder in Google Drive
+    scale: 30,                      // Resolution in meters
+    region: state.geometry(),  // Export region
+    maxPixels: 1e13                  // Maximum number of pixels allowed
+  });
+  
+  // Notify user to check the Tasks tab in GEE Code Editor
+  print('Export task created. Check the Tasks tab in the GEE Code Editor to start the export.');
+}
+
+var exportButton = ui.Button({
+  label: 'Export to Google Drive',
+  onClick: exportToDrive  // Call exportToDrive when the button is clicked
+});
+
+mainPanel.add(exportButton);*/
+ui.root.insert(0,mainPanel);
+mainPanel.add(contact);
+
+mainPanel.add(userguide);
+
+var panel = ui.Panel ({
+  style: {
+    position: 'bottom-right',
+    padding: '5px;'
+  }
+})
+/*var title = ui.Label ({
+  value: 'Classification',
+  style: {
+    fontSize: '14px',
+    fontWeight: 'bold',
+    color: 'darkblue',
+    margin: '0px;'
+  }
+})
+panel.add(title)*/
+Map.add(panel)
