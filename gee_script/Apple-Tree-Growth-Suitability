@@ -1,3 +1,30 @@
+//Imports
+var FF_IA = ee.Image("users/saraheb3/AFsuitability/FrostFree_IA"),
+    FF_IL = ee.Image("users/saraheb3/AFsuitability/FrostFree_IL"),
+    FF_IN = ee.Image("users/saraheb3/AFsuitability/FrostFree_IN"),
+    FF_KS = ee.Image("users/saraheb3/AFsuitability/FrostFree_KS"),
+    FF_MI = ee.Image("users/saraheb3/AFsuitability/FrostFree_MI"),
+    FF_MN = ee.Image("users/saraheb3/AFsuitability/FrostFree_MN"),
+    FF_MO = ee.Image("users/saraheb3/AFsuitability/FrostFree_MO"),
+    FF_ND = ee.Image("users/saraheb3/AFsuitability/FrostFree_ND"),
+    FF_NE = ee.Image("users/saraheb3/AFsuitability/FrostFree_NE"),
+    FF_OH = ee.Image("users/saraheb3/AFsuitability/FrostFree_OH"),
+    FF_SD = ee.Image("users/saraheb3/AFsuitability/FrostFree_SD"),
+    FF_WI = ee.Image("users/saraheb3/AFsuitability/FrostFree_WI"),
+    Drainage_IA = ee.Image("users/saraheb3/AFsuitability/Drainage_IA"),
+    Drainage_IL = ee.Image("users/saraheb3/AFsuitability/Drainage_IL"),
+    Drainage_IN = ee.Image("users/saraheb3/AFsuitability/Drainage_IN"),
+    Drainage_KS = ee.Image("users/saraheb3/AFsuitability/Drainage_KS"),
+    Drainage_MI = ee.Image("users/saraheb3/AFsuitability/Drainage_MI"),
+    Drainage_MN = ee.Image("users/saraheb3/AFsuitability/Drainage_MN"),
+    Drainage_MO = ee.Image("users/saraheb3/AFsuitability/Drainage_MO"),
+    Drainage_ND = ee.Image("users/saraheb3/AFsuitability/Drainage_ND"),
+    Drainage_NE = ee.Image("users/saraheb3/AFsuitability/Drainage_NE"),
+    Drainage_OH = ee.Image("users/saraheb3/AFsuitability/Drainage_OH"),
+    Drainage_SD = ee.Image("users/saraheb3/AFsuitability/Drainage_SD"),
+    Drainage_WI = ee.Image("users/saraheb3/AFsuitability/Drainage_WI"),
+    Agtiles = ee.Image("users/saraheb3/AgTileUS_MW");
+
 //Code used to create assets for apple tree growth suitability for each Midwest state
 var lis = ee.List(['Illinois', 'Indiana', 'Iowa', 'Kansas', 'Michigan', 'Minnesota', 'Missouri', 'Nebraska', 'North Dakota', 'Ohio', 'South Dakota', 'Wisconsin']); //North Central Region
 var statename = 'Wisconsin';
