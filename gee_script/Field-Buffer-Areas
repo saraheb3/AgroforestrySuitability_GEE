@@ -1,0 +1,57 @@
+//Code used to create the GEE assets of the field buffer zones for windbreaks. 
+var lis = ee.List(['Illinois', 'Indiana', 'Iowa', 'Kansas', 'Michigan', 'Minnesota', 'Missouri', 'Nebraska', 'North Dakota', 'Ohio', 'South Dakota', 'Wisconsin']); //North Central Region
+var statename = 'Illinois';
+var state = ee.FeatureCollection('FAO/GAUL/2015/level1').filter(ee.Filter.equals('ADM1_NAME', statename));
+//var state = ee.FeatureCollection('FAO/GAUL/2015/level1').filter(ee.Filter.inList('ADM1_NAME', lis));
+
+//Agricultural lands
+//NASS Cropland Data Layer
+var CDL = ee.ImageCollection('USDA/NASS/CDL')
+                  .filter(ee.Filter.date('2022-01-01', '2023-01-01'))
+                  .first().clip(state.geometry());
+var cropLandcover = CDL.select('cropland');
+var CDLcrops = cropLandcover.lte(61).or(cropLandcover.gte(205).and(cropLandcover.lte(209))).or((cropLandcover.gte(213)).and((cropLandcover.neq(215)).and(cropLandcover.neq(217)).and(cropLandcover.neq(218)).and(cropLandcover.neq(220)).and(cropLandcover.neq(223)))); //cultivated annual crops, not tree crops
+var CDLpasture = cropLandcover.eq(176);
+var CDLag = CDLcrops.or(CDLpasture);
+var CDLtreecrops = (cropLandcover.gte(66).and(cropLandcover.lte(77))).or(cropLandcover.eq(204)).or(cropLandcover.gte(210).and(cropLandcover.lte(212))).or(cropLandcover.eq(215)).or(cropLandcover.eq(217)).or(cropLandcover.eq(218)).or(cropLandcover.eq(220)).or(cropLandcover.eq(223));
+//Map.addLayer(cropLandcover, visualization254, 'Crop Landcover');
+//Map.addLayer(CDLpasture.selfMask(),{palette:'orange'},'CDLpasture');
+//Map.addLayer(CDLag.selfMask(),{palette:'orange'},'CDLag',false);
+var ESA_WC = ee.ImageCollection('ESA/WorldCover/v200').first();
+var ESA_WC_forests = ESA_WC.neq(10).selfMask();
+//Map.addLayer(ESA_WC_forests);
+var CDLag_mask = CDLag.updateMask(ESA_WC_forests);
+var CDLpasture_mask = CDLpasture.updateMask(ESA_WC_forests);
+
+
+var combined_csb= ee.FeatureCollection('projects/sat-io/open-datasets/USDA/CSB_1623').filter(ee.Filter.gte('ACRES',10));
+//Map.addLayer(combined_csb);
+var bufferFields2 = combined_csb.map(function(feature){
+  var featBuffer = feature.buffer({'distance':-10});
+  var buffer = feature.difference(featBuffer);
+  return buffer;
+});
+
+var visualization = {
+  min: 0,
+  max: 100,
+  //max: 250.0,
+  palette: ['red', 'orange','yellow', 'green','blue']
+};
+//Map.addLayer(bufferFields2,visualization,'bufferFields');
+var bufferFieldsimg2 = ee.Image.constant(1).clipToCollection(bufferFields2).clip(state.geometry());
+Map.addLayer(bufferFieldsimg2,visualization,'bufferFields');
+
+//var fieldBufferAg2 = bufferFieldsimg2.selfMask();
+//var fieldBufferAg2 = CDLag_mask.updateMask(bufferFieldsimg2).selfMask();
+
+//var ones = ee.Image(1);
+//var fieldBufferArea = ones.mask(fieldBufferAg).selfMask();
+//Map.addLayer(fieldBufferAg2,visualization,'fieldBufferCDLAg2');
+Export.image.toAsset({
+  image: bufferFieldsimg2,
+  description:'01FieldBuffer_IL',
+  scale:10,
+  maxPixels:1e13,
+  region: state.geometry()
+});
