@@ -1,0 +1,762 @@
+var GSOCseq = ee.Image("users/saraheb3/AFSuitabilityTool/GSOCseq_RSR_SSM3_Map030"),
+    Riparian_IA = ee.Image("users/saraheb3/AFSuitabilityTool/01Riparian_IA"),
+    Riparian_IL = ee.Image("users/saraheb3/AFSuitabilityTool/01Riparian_IL"),
+    Riparian_IN = ee.Image("users/saraheb3/AFSuitabilityTool/01Riparian_IN"),
+    Riparian_KS = ee.Image("users/saraheb3/AFSuitabilityTool/01Riparian_KS"),
+    Riparian_NE = ee.Image("users/saraheb3/AFSuitabilityTool/01Riparian_NE"),
+    Riparian_MI = ee.Image("users/saraheb3/AFSuitabilityTool/01Riparian_MI"),
+    Riparian_MN = ee.Image("users/saraheb3/AFSuitabilityTool/01Riparian_MN"),
+    Riparian_MO = ee.Image("users/saraheb3/AFSuitabilityTool/01Riparian_MO"),
+    Riparian_ND = ee.Image("users/saraheb3/AFSuitabilityTool/01Riparian_ND"),
+    Riparian_OH = ee.Image("users/saraheb3/AFSuitabilityTool/01Riparian_OH"),
+    Riparian_SD = ee.Image("users/saraheb3/AFSuitabilityTool/01Riparian_SD"),
+    Riparian_WI = ee.Image("users/saraheb3/AFSuitabilityTool/01Riparian_WI"),
+    GloSEM = ee.Image("users/saraheb3/AFSuitabilityTool/GloSEM_clipped_output"),
+    GroundNVI = ee.Image("users/saraheb3/AFSuitabilityTool/NVI_GW_raster"),
+    SurfaceNVI = ee.Image("users/saraheb3/AFSuitabilityTool/NVI_SW_raster"),
+    FieldBuffer_IA = ee.Image("users/saraheb3/AFSuitabilityTool/01FieldBuffer_IA"),
+    FieldBuffer_IL = ee.Image("users/saraheb3/AFSuitabilityTool/01FieldBuffer_IL"),
+    FieldBuffer_IN = ee.Image("users/saraheb3/AFSuitabilityTool/01FieldBuffer_IN"),
+    FieldBuffer_KS = ee.Image("users/saraheb3/AFSuitabilityTool/01FieldBuffer_KS"),
+    FieldBuffer_MI = ee.Image("users/saraheb3/AFSuitabilityTool/01FieldBuffer_MI"),
+    FieldBuffer_MN = ee.Image("users/saraheb3/AFSuitabilityTool/01FieldBuffer_MN"),
+    FieldBuffer_MO = ee.Image("users/saraheb3/AFSuitabilityTool/01FieldBuffer_MO"),
+    FieldBuffer_NE = ee.Image("users/saraheb3/AFSuitabilityTool/01FieldBuffer_NE"),
+    FieldBuffer_ND = ee.Image("users/saraheb3/AFSuitabilityTool/01FieldBuffer_ND"),
+    FieldBuffer_OH = ee.Image("users/saraheb3/AFSuitabilityTool/01FieldBuffer_OH"),
+    FieldBuffer_SD = ee.Image("users/saraheb3/AFSuitabilityTool/01FieldBuffer_SD"),
+    FieldBuffer_WI = ee.Image("users/saraheb3/AFSuitabilityTool/01FieldBuffer_WI"),
+    RateAgCons_EaseGovt = ee.Image("users/saraheb3/AFSuitabilityTool/RateAgCons_EaseGovt"),
+    RateConsPrac_TillCC = ee.Image("users/saraheb3/AFSuitabilityTool/RateConsPractice_TillCC"),
+    RateNewProd = ee.Image("users/saraheb3/AFSuitabilityTool/RateNewProd"),
+    RateRented = ee.Image("users/saraheb3/AFSuitabilityTool/RateRented"),
+    RateRotGraz = ee.Image("users/saraheb3/AFSuitabilityTool/RateRotGraz"),
+    HiredLabor = ee.Image("users/saraheb3/AFSuitabilityTool/HiredLabor"),
+    NCCPI_IA = ee.Image("users/saraheb3/AFSuitabilityTool/NCCPI_IA"),
+    NCCPI_IL = ee.Image("users/saraheb3/AFSuitabilityTool/NCCPI_IL"),
+    NCCPI_IN = ee.Image("users/saraheb3/AFSuitabilityTool/NCCPI_IN"),
+    NCCPI_KS = ee.Image("users/saraheb3/AFSuitabilityTool/NCCPI_KS"),
+    NCCPI_MI = ee.Image("users/saraheb3/AFSuitabilityTool/NCCPI_MI"),
+    NCCPI_MN = ee.Image("users/saraheb3/AFSuitabilityTool/NCCPI_MN"),
+    NCCPI_MO = ee.Image("users/saraheb3/AFSuitabilityTool/NCCPI_MO"),
+    NCCPI_ND = ee.Image("users/saraheb3/AFSuitabilityTool/NCCPI_ND"),
+    NCCPI_NE = ee.Image("users/saraheb3/AFSuitabilityTool/NCCPI_NE"),
+    NCCPI_OH = ee.Image("users/saraheb3/AFSuitabilityTool/NCCPI_OH"),
+    NCCPI_SD = ee.Image("users/saraheb3/AFSuitabilityTool/NCCPI_SD"),
+    NCCPI_WI = ee.Image("users/saraheb3/AFSuitabilityTool/NCCPI_WI"),
+    AvgNetIncome = ee.Image("users/saraheb3/AFSuitabilityTool/IncomePerAcre"),
+    geometry = 
+    /* color: #d63000 */
+    /* shown: false */
+    /* displayProperties: [
+      {
+        "type": "rectangle"
+      }
+    ] */
+    ee.Geometry.Polygon(
+        [[[-104.25507407169012, 49.54780316512049],
+          [-104.25507407169012, 35.81041066021405],
+          [-80.34882407169012, 35.81041066021405],
+          [-80.34882407169012, 49.54780316512049]]], null, false),
+    GSOCunitScale = ee.Image("users/saraheb3/AFSuitabilityTool/GSOCunitScale_31July24"),
+    GloSEMunitScale = ee.Image("users/saraheb3/AFSuitabilityTool/GloSEMunitScale"),
+    GroundNVIunitScale = ee.Image("users/saraheb3/AFSuitabilityTool/GroundNVIunitScale_31July24"),
+    SurfaceNVIunitScale = ee.Image("users/saraheb3/AFSuitabilityTool/SurfaceNVIunitScale"),
+    WEIunitScale = ee.Image("users/saraheb3/AFSuitabilityTool/WEIunitScale"),
+    envPrioritiesAC = ee.Image("users/saraheb3/envPriorityunitScale_AC_1Aug24"),
+    apple = ee.Image("users/saraheb3/AFSuitabilityTool/1apple_MW_2Aug24"),
+    blackwalnut = ee.Image("users/saraheb3/AFSuitabilityTool/1blackwalnut_MW_2Aug24"),
+    chestnut = ee.Image("users/saraheb3/AFSuitabilityTool/1chestnut_MW_2Aug24"),
+    cottonwood = ee.Image("users/saraheb3/AFSuitabilityTool/1cottonwood_MW_2Aug24"),
+    hazelnut = ee.Image("users/saraheb3/AFSuitabilityTool/1hazelnut_MW_2Aug24"),
+    pecan = ee.Image("users/saraheb3/AFSuitabilityTool/1pecan_MW_2Aug24"),
+    persimmon = ee.Image("users/saraheb3/AFSuitabilityTool/1persimmon_MW_2Aug24"),
+    sycamore = ee.Image("users/saraheb3/AFSuitabilityTool/1sycamore_MW_2Aug24"),
+    whiteoak = ee.Image("users/saraheb3/AFSuitabilityTool/1whiteoak_MW_2Aug24"),
+    table = ee.FeatureCollection("users/saraheb3/AFSuitabilityTool/MidwestCounties");
+
+//USER SELECT PRACTICE:
+var practice = 1; //1 = alley cropping, 2 = riparian buffers, 3 = silvopasture, 4 = windbreaks
+var lis = ee.List(['Illinois', 'Indiana', 'Iowa', 'Kansas', 'Michigan', 'Minnesota', 'Missouri', 'Nebraska', 'North Dakota', 'Ohio', 'South Dakota', 'Wisconsin']); //North Central Region
+
+var visualization = {
+  min: 0,
+  max: 1,
+  palette: ['red', 'orange','yellow', 'green','blue']
+};
+Map.addLayer(GSOCunitScale,visualization,'unitGSOCpot',false);
+Map.addLayer(GloSEMunitScale,visualization,'GloSEMunitScale',false);
+Map.addLayer(GroundNVIunitScale,visualization,'GroundNVIunitScale',false);
+Map.addLayer(SurfaceNVIunitScale,visualization,'SurfaceNVIunitScale',false);
+Map.addLayer(WEIunitScale,visualization,'WEIunitScale',false);
+
+
+var riparianarea = ee.ImageCollection([Riparian_IA, Riparian_IL, Riparian_IN, Riparian_KS, Riparian_MI, Riparian_MN, Riparian_MO, Riparian_ND, Riparian_NE, Riparian_OH, Riparian_SD, Riparian_WI]).mosaic();
+//Map.addLayer(riparianarea);
+var fieldBuffers = ee.ImageCollection([FieldBuffer_IA, FieldBuffer_IL, FieldBuffer_IN, FieldBuffer_KS, FieldBuffer_MI, FieldBuffer_MN, FieldBuffer_MO, FieldBuffer_ND, FieldBuffer_NE, FieldBuffer_OH, FieldBuffer_SD, FieldBuffer_WI]).mosaic();
+//Map.addLayer(fieldBoundaryarea);
+
+/*Map.addLayer(apple,visualization,'apple');
+Map.addLayer(blackwalnut,visualization,'blackwalnut');
+Map.addLayer(chestnut,visualization,'chestnut');
+Map.addLayer(cottonwood,visualization,'cottonwood');
+Map.addLayer(hazelnut,visualization,'hazelnut');
+Map.addLayer(pecan,visualization,'pecan');
+Map.addLayer(persimmon,visualization,'persimmon');
+Map.addLayer(sycamore,visualization,'sycamore');
+Map.addLayer(whiteoak,visualization,'whiteoak');*/
+
+var NCCPI = ee.ImageCollection([NCCPI_IA, NCCPI_IL, NCCPI_IN, NCCPI_KS, NCCPI_MI, NCCPI_MN, NCCPI_MO, NCCPI_ND, NCCPI_NE, NCCPI_OH, NCCPI_SD, NCCPI_WI]).mosaic();
+NCCPI = NCCPI.divide(1000);
+//Map.addLayer(NCCPI,visualization,'NCCPI');
+
+//var envPriorities = ee.ImageCollection([envPriorities1,envPriorities2,envPriorities3,envPriorities4, envPriorities5]).mosaic();
+//Map.addLayer(envPriorities,visualization,'envPriorities');
+//var socialFeasibility = ee.ImageCollection([socialFeasibility1,socialFeasibility2,socialFeasibility3,socialFeasibility4,socialFeasibility5]).mosaic();
+//Map.addLayer(socialFeasibility,visualization,'socialFeasibility');
+
+
+var WEIdescription = "users/saraheb3/AFSuitabilityTool/WEIunitScale";
+var GloSEMdescription = "users/saraheb3/AFSuitabilityTool/GloSEMunitScale";
+var SurfaceNVIdescription =  "users/saraheb3/AFSuitabilityTool/SurfaceNVIunitScale";
+var GroundNVIdescription = "users/saraheb3/AFSuitabilityTool/GroundNVIunitScale";
+var GSOCdescription = "users/saraheb3/AFSuitabilityTool/GSOCunitScale";
+var envPrioritiesDescription = "users/saraheb3/AFSuitabilityTool/envPriorityAreasNorm";
+var socialFeasDescription = 'users/saraheb3/AFSuitabilityTool/socialFeasibilityNorm';
+
+//var state = ee.FeatureCollection('FAO/GAUL/2015/level1').filter(ee.Filter.equals('ADM1_NAME', statename));
+var state = ee.FeatureCollection('FAO/GAUL_SIMPLIFIED_500m/2015/level1').filter(ee.Filter.inList('ADM1_NAME', lis));
+
+//print(state.geometry())
+//Map.addLayer(state, {}, 'State', false);
+
+var state_img = state.reduceToImage({properties: ['ADM1_CODE'],
+  reducer: ee.Reducer.mean()}).selfMask();
+
+//Agricultural lands
+//NASS Cropland Data Layer
+var CDL = ee.ImageCollection('USDA/NASS/CDL')
+                  .filter(ee.Filter.date('2022-01-01', '2023-01-01'))
+                  .first().clip(state.geometry());
+var cropLandcover = CDL.select('cropland');
+var CDLcrops = cropLandcover.lte(61).or(cropLandcover.gte(205).and(cropLandcover.lte(209))).or((cropLandcover.gte(213)).and((cropLandcover.neq(215)).and(cropLandcover.neq(217)).and(cropLandcover.neq(218)).and(cropLandcover.neq(220)).and(cropLandcover.neq(223)))); //cultivated annual crops, not tree crops
+var CDLpasture = cropLandcover.eq(176);
+var CDLag = CDLcrops.or(CDLpasture);
+var CDLtreecrops = (cropLandcover.gte(66).and(cropLandcover.lte(77))).or(cropLandcover.eq(204)).or(cropLandcover.gte(210).and(cropLandcover.lte(212))).or(cropLandcover.eq(215)).or(cropLandcover.eq(217)).or(cropLandcover.eq(218)).or(cropLandcover.eq(220)).or(cropLandcover.eq(223));
+//Map.addLayer(cropLandcover, visualization254, 'Crop Landcover');
+//Map.addLayer(CDLpasture.selfMask(),{palette:'orange'},'CDLpasture');
+//Map.addLayer(CDLag.selfMask(),{palette:'orange'},'CDLag',false);
+var ESA_WC = ee.ImageCollection('ESA/WorldCover/v200').first();
+var ESA_WC_nforests = ESA_WC.neq(10).selfMask();
+//Map.addLayer(ESA_WC_forests);
+var CDLag_mask = CDLag.mask(ESA_WC_nforests).clip(state.geometry());
+var CDLpasture_mask = CDLpasture.mask(ESA_WC_nforests).clip(state.geometry()).selfMask();
+
+if (practice==1){
+  var constraint = CDLag_mask;
+}
+if (practice==2){
+  var constraint = riparianarea;
+}
+if (practice==3){
+  var constraint = CDLpasture_mask;
+}
+if (practice==4){
+  var constraint = fieldBuffers;
+}
+Map.addLayer(constraint.selfMask(),{},'constraint',false);
+Export.image.toDrive({
+  image: CDLpasture_mask,
+  description:'CDLpasture_9Aug24',
+  folder: "GEE_AFSuitability",
+  scale:100,
+  maxPixels:1e13,
+  region: geometry,
+  skipEmptyTiles:true,
+  fileFormat: 'GeoTIFF'
+});
+var pixelArea = ee.Image.pixelArea();
+var pixel = CDLpasture_mask.multiply(pixelArea);
+print(pixel)
+var sumAg = ee.Image(pixel).reduceRegion({ //generate sum of TPP population for each country
+    geometry: geometry,
+    reducer: ee.Reducer.sum(),
+    scale: 100, //use data layer resolution (~93m) 
+    tileScale:16, //set to 16 to avoid processing limitations
+    maxPixels:1e13,
+    //bestEffort: true
+});
+print(sumAg);
+var squareMeters = sumAg.getNumber('constant');//or cropland or constant
+var squareKilometers = squareMeters.divide(1e6);
+//print("Agricultural land: ",squareKilometers);
+
+var list = ee.List([]);
+var list = list.add([squareKilometers]); //add current country FPP to list of FPP for all countries
+
+var list = ee.FeatureCollection(list //function to convert list to FeatureCollection for exporting.
+  .map(function(element){ 
+    return ee.Feature(null,{
+      //'scale':ee.List(element).get(0),
+      'area':ee.List(element).get(0),
+    }
+  )}));
+Export.table.toDrive({//export FPP results to user's Google Drive in csv format
+    collection:list, 
+    folder: "AF_GEE_Folder",
+    description:'ConstraintArea_100m_SP',
+    fileFormat: 'csv'
+    }); 
+
+//Environmental Priorities
+GSOCseq = GSOCseq.clip(state.geometry());
+GroundNVI = GroundNVI.clip(state.geometry());
+SurfaceNVI = SurfaceNVI.clip(state.geometry());
+GloSEM = GloSEM.clip(state.geometry());
+var wind_erodibility_index = ee.Image('projects/earthengine-legacy/assets/projects/sat-io/open-datasets/CSRL_soil_properties/land_use/wind_erodibility_index').clip(state.geometry());
+
+
+/*
+//Map.addLayer(GSOCseq); //import soil organic carbon sequestration potential data layer
+var GSOC_perc = GSOCseq.reduceRegion({reducer:ee.Reducer.percentile([5, 95]), geometry:geometry, scale:1000, maxPixels:1e13});
+//print(GSOC_perc)
+// use unit scale to normalize the pixel values
+//var GSOCunitScale = GSOCseq.unitScale(ee.Number(mean.get('b1')).subtract(ee.Number(stdDev.get('b1')).multiply(2)), ee.Number(mean.get('b1')).add(ee.Number(stdDev.get('b1')).multiply(2))).clamp(0,1);
+var GSOCunitScale = GSOCseq.unitScale(ee.Number(GSOC_perc.get('b1_p5')), ee.Number(GSOC_perc.get('b1_p95'))).unmask(ee.Image(0)).clamp(0,1);
+Map.addLayer(GSOCunitScale,visualization,'unitGSOCpot');
+
+Export.image.toAsset({
+  image: GSOCunitScale,
+  description:'GSOCunitScale',
+  assetId: GSOCdescription,
+  scale:100,
+  maxPixels:1e13,
+  region: geometry
+});
+
+Export.image.toDrive({
+  image: GSOCunitScale,
+  description:'GSOCunitScale_1Aug24',
+  folder: "GEE_AFSuitability",
+  scale:100,
+  maxPixels:1e13,
+  region: geometry,
+  skipEmptyTiles:true,
+  fileFormat: 'GeoTIFF'
+});
+
+//Map.addLayer(GroundNVI);
+var GroundNVI_perc = GroundNVI.reduceRegion({reducer:ee.Reducer.percentile([5, 95]), geometry:geometry, scale:1000, maxPixels:1e13});
+//print(GroundNVI_perc)
+
+// use unit scale to normalize the pixel values
+//var GroundNVIunitScale = GroundNVI.unitScale(ee.Number(mean.get('b1')).subtract(ee.Number(stdDev.get('b1')).multiply(2)), ee.Number(mean.get('b1')).add(ee.Number(stdDev.get('b1')).multiply(2))).clamp(0,1);
+var GroundNVIunitScale = GroundNVI.unitScale(ee.Number(GroundNVI_perc.get('b1_p5')), ee.Number(GroundNVI_perc.get('b1_p95'))).unmask(ee.Image(0)).clamp(0,1);
+Map.addLayer(GroundNVIunitScale,visualization,'unitGroundNVI',false);
+
+Export.image.toAsset({
+  image: GroundNVIunitScale,
+  description:'GroundNVIunitScale',
+  assetId: GroundNVIdescription,
+  scale:100,
+  maxPixels:1e13,
+  region: geometry
+});
+
+Export.image.toDrive({
+  image: GroundNVIunitScale,
+  description:'GroundNVIunitScale_1Aug24',
+  folder: "GEE_AFSuitability",
+  scale:100,
+  maxPixels:1e13,
+  region: geometry,
+  skipEmptyTiles:true,
+  fileFormat: 'GeoTIFF'
+});
+
+
+//Map.addLayer(SurfaceNVI);
+var SurfaceNVI_perc = SurfaceNVI.reduceRegion({reducer:ee.Reducer.percentile([5, 95]), geometry:geometry, scale:1000, maxPixels:1e13});
+//print(SurfaceNVI_perc)
+
+// use unit scale to normalize the pixel values
+//var SurfaceNVIunitScale = SurfaceNVI.unitScale(ee.Number(mean.get('b1')).subtract(ee.Number(stdDev.get('b1')).multiply(2)), ee.Number(mean.get('b1')).add(ee.Number(stdDev.get('b1')).multiply(2))).clamp(0,1);
+var SurfaceNVIunitScale = SurfaceNVI.unitScale(ee.Number(SurfaceNVI_perc.get('b1_p5')), ee.Number(SurfaceNVI_perc.get('b1_p95'))).unmask(ee.Image(0)).clamp(0,1);
+Map.addLayer(SurfaceNVIunitScale,visualization,'unitSurfaceNVI',false);
+
+Export.image.toAsset({
+  image: SurfaceNVIunitScale,
+  description:'SurfaceNVIunitScale',
+  assetId: SurfaceNVIdescription,
+  scale:100,
+  maxPixels:1e13,
+  region: geometry
+});
+
+Export.image.toDrive({
+  image: SurfaceNVIunitScale,
+  description:'SurfaceNVIunitScale_1Aug24',
+  folder: "GEE_AFSuitability",
+  scale:100,
+  maxPixels:1e13,
+  region: geometry,
+  skipEmptyTiles:true,
+  fileFormat: 'GeoTIFF'
+});
+
+
+//Map.addLayer(GloSEM);
+var GloSEM_perc = GloSEM.reduceRegion({reducer:ee.Reducer.percentile([5, 95]), geometry:geometry, scale:1000, maxPixels:1e13});
+//print(GloSEM_perc)
+
+// use unit scale to normalize the pixel values
+//var GloSEMunitScale = GloSEM.unitScale(ee.Number(mean.get('b1')).subtract(ee.Number(stdDev.get('b1')).multiply(2)), ee.Number(mean.get('b1')).add(ee.Number(stdDev.get('b1')).multiply(2))).clamp(0,1);
+var GloSEMunitScale = GloSEM.unitScale(ee.Number(GloSEM_perc.get('b1_p5')), ee.Number(GloSEM_perc.get('b1_p95'))).unmask(ee.Image(0)).clamp(0,1);
+Map.addLayer(GloSEMunitScale,visualization,'unitGloSEM',false);
+
+Export.image.toAsset({
+  image: GloSEMunitScale,
+  description:'GloSEMunitScale',
+  assetId: GloSEMdescription,
+  scale:100,
+  maxPixels:1e13,
+  region: geometry
+});
+
+Export.image.toDrive({
+  image: GloSEMunitScale,
+  description:'GloSEMunitScale_1Aug24',
+  folder: "GEE_AFSuitability",
+  scale:100,
+  maxPixels:1e13,
+  region: geometry,
+  skipEmptyTiles:true,
+  fileFormat: 'GeoTIFF'
+});
+
+var wind_erodibility_index_perc = wind_erodibility_index.reduceRegion({reducer:ee.Reducer.percentile([5, 95]), geometry:geometry, scale:1000, maxPixels:1e13});
+//print(wind_erodibility_index_perc)
+// use unit scale to normalize the pixel values
+//var WEIunitScale = wind_erodibility_index.unitScale(ee.Number(mean.get('b1')).subtract(ee.Number(stdDev.get('b1')).multiply(2)), ee.Number(mean.get('b1')).add(ee.Number(stdDev.get('b1')).multiply(2))).clamp(0,1);
+var WEIunitScale = wind_erodibility_index.unitScale(ee.Number(wind_erodibility_index_perc.get('b1_p5')), ee.Number(wind_erodibility_index_perc.get('b1_p95'))).unmask(ee.Image(0)).clamp(0,1);
+Map.addLayer(WEIunitScale,visualization,'unitWEI',false);
+
+Export.image.toAsset({
+  image: WEIunitScale,
+  description:'WEIunitScale',
+  assetId: WEIdescription,
+  scale:100,
+  maxPixels:1e13,
+  region: geometry
+});
+
+Export.image.toDrive({
+  image: WEIunitScale,
+  description:'WEIunitScale_1Aug24',
+  folder: "GEE_AFSuitability",
+  scale:100,
+  maxPixels:1e13,
+  region: geometry,
+  skipEmptyTiles:true,
+  fileFormat: 'GeoTIFF'
+});
+*/
+
+//Social feasibility
+//RateAgCons_EaseGovt
+var RateAgCons_EaseGovt_perc = RateAgCons_EaseGovt.reduceRegion({reducer:ee.Reducer.percentile([5, 95]), geometry:geometry, scale:1000, maxPixels:1e13});
+//print(RateAgCons_EaseGovt_perc)
+// use unit scale to normalize the pixel values
+//var RateAgCons_EaseGovtunitScale = RateAgCons_EaseGovt.unitScale(ee.Number(mean.get('b1')).subtract(ee.Number(stdDev.get('b1')).multiply(2)), ee.Number(mean.get('b1')).add(ee.Number(stdDev.get('b1')).multiply(2))).clamp(0,1);
+var RateAgCons_EaseGovtunitScale = RateAgCons_EaseGovt.unitScale(ee.Number(RateAgCons_EaseGovt_perc.get('b1_p5')), ee.Number(RateAgCons_EaseGovt_perc.get('b1_p95'))).clamp(0,1);
+Map.addLayer(RateAgCons_EaseGovtunitScale,visualization,'unitRateAgCons_EaseGovt',false);
+
+Export.image.toDrive({
+  image: RateAgCons_EaseGovtunitScale,
+  description:'RateAgCons_EaseGovtunitScale_1Aug24',
+  folder: "GEE_AFSuitability",
+  scale:100,
+  maxPixels:1e13,
+  region: geometry,
+  skipEmptyTiles:true,
+  fileFormat: 'GeoTIFF'
+});
+
+
+//RateConsPrac_TillCC
+var RateConsPrac_TillCC_perc = RateConsPrac_TillCC.reduceRegion({reducer:ee.Reducer.percentile([5, 95]), geometry:geometry, scale:1000, maxPixels:1e13});
+//print(RateConsPrac_TillCC_perc)
+
+// use unit scale to normalize the pixel values
+//var RateConsPrac_TillCCunitScale = RateConsPrac_TillCC.unitScale(ee.Number(mean.get('b1')).subtract(ee.Number(stdDev.get('b1')).multiply(2)), ee.Number(mean.get('b1')).add(ee.Number(stdDev.get('b1')).multiply(2))).clamp(0,1);
+var RateConsPrac_TillCCunitScale = RateConsPrac_TillCC.unitScale(ee.Number(RateConsPrac_TillCC_perc.get('b1_p5')), ee.Number(RateConsPrac_TillCC_perc.get('b1_p95'))).clamp(0,1);
+Map.addLayer(RateConsPrac_TillCCunitScale,visualization,'unitRateConsPrac_TillCC',false);
+
+//RateNewProd
+//Map.addLayer(RateNewProd);
+var RateNewProd_perc = RateNewProd.reduceRegion({reducer:ee.Reducer.percentile([5, 95]), geometry:geometry, scale:1000, maxPixels:1e13});
+//print(RateNewProd_perc)
+
+// use unit scale to normalize the pixel values
+var RateNewProdunitScale = RateNewProd.unitScale(ee.Number(RateNewProd_perc.get('b1_p5')), ee.Number(RateNewProd_perc.get('b1_p95'))).clamp(0,1);
+//var RateNewProdunitScale = RateNewProd.unitScale(ee.Number(mean.get('b1')).subtract(ee.Number(stdDev.get('b1')).multiply(2)), ee.Number(mean.get('b1')).add(ee.Number(stdDev.get('b1')).multiply(2))).clamp(0,1);
+Map.addLayer(RateNewProdunitScale,visualization,'unitRateNewProd',false);
+
+Export.image.toDrive({
+  image: RateNewProdunitScale,
+  description:'RateNewProdunitScale_1Aug24',
+  folder: "GEE_AFSuitability",
+  scale:100,
+  maxPixels:1e13,
+  region: geometry,
+  skipEmptyTiles:true,
+  fileFormat: 'GeoTIFF'
+});
+
+
+//RateRented
+RateRented = RateRented.multiply(-1);
+var RateRented_perc = RateRented.reduceRegion({reducer:ee.Reducer.percentile([5, 95]), geometry:geometry, scale:1000, maxPixels:1e13});
+//print(RateRented_perc)
+
+// use unit scale to normalize the pixel values
+//var RateRentedunitScale = RateRented.unitScale(ee.Number(mean.get('b1')).subtract(ee.Number(stdDev.get('b1')).multiply(2)), ee.Number(mean.get('b1')).add(ee.Number(stdDev.get('b1')).multiply(2))).clamp(0,1);
+var RateRentedunitScale = RateRented.unitScale(ee.Number(RateRented_perc.get('b1_p5')), ee.Number(RateRented_perc.get('b1_p95'))).clamp(0,1);
+Map.addLayer(RateRentedunitScale,visualization,'unitRateRented',false);
+
+Export.image.toDrive({
+  image: RateRentedunitScale,
+  description:'RateRentedunitScale_1Aug24',
+  folder: "GEE_AFSuitability",
+  scale:100,
+  maxPixels:1e13,
+  region: geometry,
+  skipEmptyTiles:true,
+  fileFormat: 'GeoTIFF'
+});
+
+
+//RateRotGraz
+var RateRotGraz_perc = RateRotGraz.reduceRegion({reducer:ee.Reducer.percentile([5, 95]), geometry:geometry, scale:1000, maxPixels:1e13});
+//print(RateRotGraz_perc)
+
+// use unit scale to normalize the pixel values
+var RateRotGrazunitScale = RateRotGraz.unitScale(ee.Number(RateRotGraz_perc.get('b1_p5')), ee.Number(RateRotGraz_perc.get('b1_p95'))).clamp(0,1);
+//var RateRotGrazunitScale = RateRotGraz.unitScale(ee.Number(mean.get('b1')).subtract(ee.Number(stdDev.get('b1')).multiply(2)), ee.Number(mean.get('b1')).add(ee.Number(stdDev.get('b1')).multiply(2))).clamp(0,1);
+Map.addLayer(RateRotGrazunitScale,visualization,'unitRateRotGraz',false);
+
+Export.image.toDrive({
+  image: RateRotGrazunitScale,
+  description:'RateRotGrazunitScale_1Aug24',
+  folder: "GEE_AFSuitability",
+  scale:100,
+  maxPixels:1e13,
+  region: geometry,
+  skipEmptyTiles:true,
+  fileFormat: 'GeoTIFF'
+});
+
+
+//HiredLabor 
+HiredLabor = HiredLabor.clip(state.geometry())
+var HiredLabor_perc = HiredLabor.reduceRegion({reducer:ee.Reducer.percentile([5, 95]), geometry:geometry, scale:1000, maxPixels:1e13});
+//print(HiredLabor_perc)
+
+// use unit scale to normalize the pixel values
+var HiredLaborunitScale = HiredLabor.unitScale(ee.Number(HiredLabor_perc.get('b1_p5')), ee.Number(HiredLabor_perc.get('b1_p95'))).clamp(0,1);
+//var HiredLaborunitScale = HiredLabor.unitScale(ee.Number(mean.get('b1')).subtract(ee.Number(stdDev.get('b1')).multiply(2)), ee.Number(mean.get('b1')).add(ee.Number(stdDev.get('b1')).multiply(2))).clamp(0,1);
+Map.addLayer(HiredLaborunitScale,visualization,'unitHiredLabor',false);
+
+Export.image.toDrive({
+  image: HiredLaborunitScale,
+  description:'HiredLaborunitScale_1Aug24',
+  folder: "GEE_AFSuitability",
+  scale:100,
+  maxPixels:1e13,
+  region: geometry,
+  skipEmptyTiles:true,
+  fileFormat: 'GeoTIFF'
+});
+
+//Economic feasibility
+var income = AvgNetIncome.multiply(NCCPI);
+var visualizationInc = {
+  min: 0,
+  max: 400,
+  palette: ['red', 'orange','yellow', 'green','blue']
+};
+//Map.addLayer(income,visualizationInc,'income');
+
+//Tree crop suitability
+   
+
+
+//Environmental Priority Areas
+if (practice==1){
+  //Alley Cropping
+  var weightWaterErosion = 5;
+  var weightWindErosion = 5;
+  var weightSOCpot = 5;
+  var weightSurfaceNVI = 3;
+  var weightGroundNVI = 1;
+}
+
+if (practice==2){
+  //Riparian buffers
+  var weightWaterErosion = 3;
+  var weightWindErosion = 2;
+  var weightSOCpot = 4;
+  var weightSurfaceNVI = 5;
+  var weightGroundNVI = 5;
+}
+
+if (practice==3){
+  //Silvopasture
+  var weightWaterErosion = 4;
+  var weightWindErosion = 3;
+  var weightSOCpot = 3;
+  var weightSurfaceNVI = 3;
+  var weightGroundNVI = 2;
+}
+
+if (practice==4){
+  //Windbreaks
+  var weightWaterErosion = 1;
+  var weightWindErosion = 5;
+  var weightSOCpot = 5;
+  var weightSurfaceNVI = 1;
+  var weightGroundNVI = 1;
+}
+
+weightSurfaceNVI = weightSurfaceNVI/2;
+weightGroundNVI = weightGroundNVI/2;
+//print(weightGroundNVI); //test
+
+var palettes = require('users/gena/packages:palettes');
+var palette = palettes.matplotlib.viridis[7];
+var visualization = {
+  min: 0.0,
+  max: 1.0,
+  palette: palette
+};
+
+var weightEnvPriorityAreas = (GloSEMunitScale.multiply(weightWaterErosion)).add((WEIunitScale.multiply(weightWindErosion))).add((GSOCunitScale.multiply(weightSOCpot))).add((SurfaceNVIunitScale.multiply(weightSurfaceNVI))).add((GroundNVIunitScale.multiply(weightGroundNVI)));
+var totalEnvWeights = weightWaterErosion+weightWindErosion+weightSOCpot+weightSurfaceNVI+weightGroundNVI;
+//print(totalEnvWeights);
+var envPriorityAreasNorm = weightEnvPriorityAreas.divide(totalEnvWeights).selfMask();
+Map.addLayer(envPriorityAreasNorm,visualization,'envPriorityAreasNorm',false);
+
+var envPriority_perc = envPriorityAreasNorm.reduceRegion({reducer:ee.Reducer.percentile([5, 95]), geometry:geometry, scale:1000, maxPixels:1e13});
+//print(envPriority_perc)
+// use unit scale to normalize the pixel values
+var envPriorityunitScale = envPriorityAreasNorm.unitScale(ee.Number(envPriority_perc.get('b1_p5')), ee.Number(envPriority_perc.get('b1_p95'))).clamp(0,1);
+Map.addLayer(envPriorityunitScale,visualization,'envPriorityunitScale',false);
+
+Export.image.toAsset({
+  image: envPriorityunitScale,
+  description:'envPriorityunitScale',
+  assetId: 'envPriorityunitScale',
+  scale:100,
+  maxPixels:1e13,
+  region: geometry
+});
+
+
+Export.image.toDrive({
+  image: envPriorityunitScale,
+  description:'envPriorityunitScale_AC_1Aug24',
+  folder: "GEE_AFSuitability",
+  scale:100,
+  maxPixels:1e13,
+  region: geometry,
+  skipEmptyTiles:true,
+  fileFormat: 'GeoTIFF'
+});
+
+//Map.addLayer(envPriorities,visualization,'envPriorities');
+//Tree Growth Suitability
+var suitableTrees = apple.add(blackwalnut).add(chestnut).add(hazelnut).add(pecan).add(persimmon).add(cottonwood).add(sycamore).add(whiteoak);
+var suitableTreesNorm = suitableTrees.divide(9);
+//Map.addLayer(suitableTrees,visualization,'suitableTrees');
+Map.addLayer(suitableTreesNorm,visualization,'suitableTreesNorm',false);
+
+Export.image.toDrive({
+  image: suitableTreesNorm,
+  description:'suitableTreesNorm_5Aug24',
+  folder: "GEE_AFSuitability",
+  scale:100,
+  maxPixels:1e13,
+  region: geometry,
+  skipEmptyTiles:true,
+  fileFormat: 'GeoTIFF'
+});
+//var suitableTrees_perc = suitableTreesNorm.reduceRegion({reducer:ee.Reducer.percentile([10, 90]), geometry:state.geometry(), scale:1000, maxPixels:1e13});
+//print(suitableTrees_perc)
+// use unit scale to normalize the pixel values
+//var suitableTreesunitScale = suitableTreesNorm.unitScale(ee.Number(suitableTrees_perc.get('latitude_p10')), ee.Number(suitableTrees_perc.get('latitude_p90'))).clamp(0,1);
+//Map.addLayer(suitableTreesunitScale,visualization,'suitableTreesunitScale');
+
+var treeAreas = suitableTreesNorm.gt(0.1).and(suitableTreesNorm.lt(0.4)).selfMask();//.and(suitableTreesNorm.lt(0.7))
+Map.addLayer(treeAreas,visualization,'treeAreas',false);
+
+var pixelArea = ee.Image.pixelArea();
+var pixel2 = treeAreas.multiply(pixelArea);
+print(pixel2)
+var sumTreeSuit = ee.Image(pixel2).reduceRegion({ //generate sum of TPP population for each country
+    geometry: geometry,
+    reducer: ee.Reducer.sum(),
+    scale: 30, //use data layer resolution (~93m) 
+    tileScale:16, //set to 16 to avoid processing limitations
+    maxPixels:1e13,
+    //bestEffort: true
+});
+print('sumTreeSuit:',sumTreeSuit);
+var squareMeters2 = sumTreeSuit.getNumber('latitude');//or cropland or constant
+var squareKilometers2 = squareMeters2.divide(1e6);
+//print("Agricultural land: ",squareKilometers);
+
+var list2 = ee.List([]);
+var list2 = list2.add([squareKilometers2]); //add current country FPP to list of FPP for all countries
+
+var list2 = ee.FeatureCollection(list2 //function to convert list to FeatureCollection for exporting.
+  .map(function(element){ 
+    return ee.Feature(null,{
+      //'scale':ee.List(element).get(0),
+      'area':ee.List(element).get(0),
+    }
+  )}));
+Export.table.toDrive({//export results to user's Google Drive in csv format
+    collection:list2, 
+    folder: "AF_GEE_Folder",
+    description:'LowTreeSuit_30m',
+    fileFormat: 'csv'
+    }); 
+
+
+//Social Feasibility
+var socialFeasibility = RateAgCons_EaseGovtunitScale.add(RateNewProdunitScale).add(RateRentedunitScale).add(HiredLaborunitScale).add(RateRotGrazunitScale);
+var socialFeasibilityNorm = socialFeasibility.divide(5);
+Map.addLayer(socialFeasibilityNorm,visualization,'socialFeasibilityNorm',false);
+
+
+var socialFeasibility_perc = socialFeasibilityNorm.reduceRegion({reducer:ee.Reducer.percentile([5, 95]), geometry:geometry, scale:1000, maxPixels:1e13});
+//print(socialFeasibility_perc)
+// use unit scale to normalize the pixel values
+var socialFeasibilityunitScale = socialFeasibilityNorm.unitScale(ee.Number(socialFeasibility_perc.get('b1_p5')), ee.Number(socialFeasibility_perc.get('b1_p95'))).clamp(0,1);
+Map.addLayer(socialFeasibilityunitScale,visualization,'socialFeasibilityunitScale',false);
+
+Export.image.toAsset({
+  image: socialFeasibilityunitScale,
+  description:'socialFeasibilityunitScale',
+  assetId: 'socialFeasibilityunitScale_AC_5Aug24',
+  scale:100,
+  maxPixels:1e13,
+  region: geometry
+});
+
+Export.image.toDrive({
+  image: socialFeasibilityunitScale,
+  description:'socialFeasibilityunitScale_AC_5Aug24',
+  folder: "GEE_AFSuitability",
+  scale:100,
+  maxPixels:1e13,
+  region: geometry,
+  skipEmptyTiles:true,
+  fileFormat: 'GeoTIFF'
+});
+
+//Economic Feasibility
+//income
+income = income.multiply(-1);
+var income_perc = income.reduceRegion({reducer:ee.Reducer.percentile([5, 95]), geometry:geometry, scale:1000, maxPixels:1e13});
+//print(income_perc)
+// use unit scale to normalize the pixel values
+var incomeunitScale = income.unitScale(ee.Number(income_perc.get('b1_p5')), ee.Number(income_perc.get('b1_p95'))).clamp(0,1);
+Map.addLayer(incomeunitScale,visualization,'incomeunitScale',false);
+
+Export.image.toDrive({
+  image: incomeunitScale,
+  description:'incomeunitScale_5Aug24',
+  folder: "GEE_AFSuitability",
+  scale:100,
+  maxPixels:1e13,
+  region: geometry,
+  skipEmptyTiles:true,
+  fileFormat: 'GeoTIFF'
+});
+
+//var socialEcologicalSuitability = constraint.multiply(envPriorityunitScale).multiply(suitableTreesNorm).multiply(socialFeasibilityunitScale).multiply(incomeunitScale).unmask(ee.Image(0)).clip(state.geometry());
+var socialEcologicalSuitability = constraint.multiply((envPriorityunitScale).add(suitableTreesNorm).add(socialFeasibilityunitScale).add(incomeunitScale)).selfMask();
+//socialEcologicalSuitability = socialEcologicalSuitability.multiply(100);
+Map.addLayer(socialEcologicalSuitability,visualization,'socialEcologicalSuitability',false);
+var socialEcologicalSuitability_perc = socialEcologicalSuitability.reduceRegion({reducer:ee.Reducer.percentile([5, 95]), geometry:geometry, scale:1000, maxPixels:1e13});
+print(socialEcologicalSuitability_perc);
+var SESsuitabilityunitScale = socialEcologicalSuitability.unitScale(ee.Number(socialEcologicalSuitability_perc.get('cropland_p5')), ee.Number(socialEcologicalSuitability_perc.get('cropland_p95'))).clamp(0,1); //RB constant, AC cropland
+Map.addLayer(SESsuitabilityunitScale,visualization,'SESsuitabilityunitScale');
+
+var minMax = socialEcologicalSuitability.reduceRegion({
+  reducer: ee.Reducer.minMax(),
+  geometry: geometry,
+  scale: 1000,
+  maxPixels: 1e13,
+  // tileScale: 16
+}); 
+print(minMax)
+
+Export.image.toDrive({
+  image: SESsuitabilityunitScale,
+  description:'SESsuitabilityunitScale_AC',
+  folder: "GEE_AFSuitability",
+  scale:100,
+  maxPixels:1e13,
+  region: geometry,
+  skipEmptyTiles:true,
+  fileFormat: 'GeoTIFF'
+});
+
+var SEStop = SESsuitabilityunitScale.gt(0.99).selfMask();
+Map.addLayer(SEStop,visualization,'SEStop',false);
+
+Export.image.toDrive({
+  image: CDLpasture_mask,
+  description:'CDLpasture_9Aug24',
+  folder: "GEE_AFSuitability",
+  scale:100,
+  maxPixels:1e13,
+  region: geometry,
+  skipEmptyTiles:true,
+  fileFormat: 'GeoTIFF'
+});
+var pixelArea = ee.Image.pixelArea();
+var pixel = CDLpasture_mask.multiply(pixelArea);
+print(pixel)
+var sumAg = ee.Image(pixel).reduceRegion({ //generate sum of TPP population for each country
+    geometry: geometry,
+    reducer: ee.Reducer.sum(),
+    scale: 100, //use data layer resolution (~93m) 
+    tileScale:16, //set to 16 to avoid processing limitations
+    maxPixels:1e13,
+    //bestEffort: true
+});
+print(sumAg);
+var squareMeters = sumAg.getNumber('constant');//or cropland or constant
+var squareKilometers = squareMeters.divide(1e6);
+//print("Agricultural land: ",squareKilometers);
+
+var list = ee.List([]);
+var list = list.add([squareKilometers]); //add current country FPP to list of FPP for all countries
+
+var list = ee.FeatureCollection(list //function to convert list to FeatureCollection for exporting.
+  .map(function(element){ 
+    return ee.Feature(null,{
+      //'scale':ee.List(element).get(0),
+      'area':ee.List(element).get(0),
+    }
+  )}));
+Export.table.toDrive({//export FPP results to user's Google Drive in csv format
+    collection:list, 
+    folder: "AF_GEE_Folder",
+    description:'ConstraintArea_100m_SP',
+    fileFormat: 'csv'
+    }); 
+
