@@ -1,0 +1,373 @@
+//Sycamore
+//Imports
+var FF_IA = ee.Image("users/saraheb3/AFsuitability/FrostFree_IA"),
+    FF_IL = ee.Image("users/saraheb3/AFsuitability/FrostFree_IL"),
+    FF_IN = ee.Image("users/saraheb3/AFsuitability/FrostFree_IN"),
+    FF_KS = ee.Image("users/saraheb3/AFsuitability/FrostFree_KS"),
+    FF_MI = ee.Image("users/saraheb3/AFsuitability/FrostFree_MI"),
+    FF_MN = ee.Image("users/saraheb3/AFsuitability/FrostFree_MN"),
+    FF_MO = ee.Image("users/saraheb3/AFsuitability/FrostFree_MO"),
+    FF_ND = ee.Image("users/saraheb3/AFsuitability/FrostFree_ND"),
+    FF_NE = ee.Image("users/saraheb3/AFsuitability/FrostFree_NE"),
+    FF_OH = ee.Image("users/saraheb3/AFsuitability/FrostFree_OH"),
+    FF_SD = ee.Image("users/saraheb3/AFsuitability/FrostFree_SD"),
+    FF_WI = ee.Image("users/saraheb3/AFsuitability/FrostFree_WI"),
+    Drainage_IA = ee.Image("users/saraheb3/AFsuitability/Drainage_IA"),
+    Drainage_IL = ee.Image("users/saraheb3/AFsuitability/Drainage_IL"),
+    Drainage_IN = ee.Image("users/saraheb3/AFsuitability/Drainage_IN"),
+    Drainage_KS = ee.Image("users/saraheb3/AFsuitability/Drainage_KS"),
+    Drainage_MI = ee.Image("users/saraheb3/AFsuitability/Drainage_MI"),
+    Drainage_MN = ee.Image("users/saraheb3/AFsuitability/Drainage_MN"),
+    Drainage_MO = ee.Image("users/saraheb3/AFsuitability/Drainage_MO"),
+    Drainage_ND = ee.Image("users/saraheb3/AFsuitability/Drainage_ND"),
+    Drainage_NE = ee.Image("users/saraheb3/AFsuitability/Drainage_NE"),
+    Drainage_OH = ee.Image("users/saraheb3/AFsuitability/Drainage_OH"),
+    Drainage_SD = ee.Image("users/saraheb3/AFsuitability/Drainage_SD"),
+    Drainage_WI = ee.Image("users/saraheb3/AFsuitability/Drainage_WI"),
+    Agtiles = ee.Image("users/saraheb3/AgTileUS_MW");
+    var pH = ee.Image("users/saraheb3/AFsuitability/STATSGO2_pH");
+var FFperiod = ee.ImageCollection([FF_IA, FF_IL, FF_IN, FF_KS, FF_MI, FF_MN, FF_MO, FF_ND, FF_NE, FF_OH, FF_SD, FF_WI]).mosaic();
+var drainage = ee.ImageCollection([Drainage_IA, Drainage_IL, Drainage_IN, Drainage_KS, Drainage_MI, Drainage_MN, Drainage_MO, Drainage_ND, Drainage_NE, Drainage_OH, Drainage_SD, Drainage_WI]).mosaic();
+
+var geometry = 
+    /* color: #d63000 */
+    /* shown: false */
+    /* displayProperties: [
+      {
+        "type": "rectangle"
+      }
+    ] */
+    ee.Geometry.Polygon(
+        [[[-104.25507407169012, 49.54780316512049],
+          [-104.25507407169012, 35.81041066021405],
+          [-80.34882407169012, 35.81041066021405],
+          [-80.34882407169012, 49.54780316512049]]], null, false);
+          
+Map.addLayer(Agtiles.selfMask());
+//print(drainage);
+//print(FFperiod);
+var visualization = {
+  min: 0.0,
+  max: 7.0,
+  palette: ['red', 'orange','yellow', 'green','blue']
+};
+Map.addLayer(drainage,visualization,'drainage');
+
+var visualizationFF = {
+  min: 120.0,
+  max: 227.0,
+  palette: ['red', 'orange','yellow', 'green','blue']
+};
+Map.addLayer(FFperiod,visualizationFF,'FFperiod');
+//-------------------------
+//Select state of Illinois for boundaries
+//https://developers.google.com/earth-engine/datasets/catalog/FAO_GAUL_2015_level1
+var lis = ee.List(['Illinois', 'Indiana', 'Iowa', 'Kansas', 'Michigan', 'Minnesota', 'Missouri', 'Nebraska', 'North Dakota', 'Ohio', 'South Dakota', 'Wisconsin']); 
+//var lis = ee.List(['Illinois', 'Iowa', 'Minnesota', 'Missouri', 'Wisconsin']); //North Central Region
+//var lis = ee.List(['Kansas', 'Nebraska', 'North Dakota', 'South Dakota']); //North Central Region
+//var lis = ee.List(['Indiana', 'Ohio']); //North Central Region
+//var lis = ee.List(['Michigan']); //North Central Region
+var assetDescription = "users/saraheb3/AFSuitabilityTool/1sycamore_MW_2Aug24";
+
+//var state = ee.FeatureCollection('FAO/GAUL/2015/level1').filter(ee.Filter.equals('ADM1_NAME', statename));
+var state = ee.FeatureCollection('FAO/GAUL_SIMPLIFIED_500m/2015/level1').filter(ee.Filter.inList('ADM1_NAME', lis));
+
+print(state)
+Map.addLayer(state, {}, 'State', false);
+
+//Tree species growth requirement parameters
+//Latitude
+var latmin = 29;
+var latmax = 44;
+
+//Elevation
+var elevmin = 0;
+var elevmax = 800;
+
+//Slope
+var slopemin = 0;
+var slopemax = 15; //0-15 good, 15-30 questionable
+
+//Soil depth
+var depthmin = 76; 
+
+//Precipitation
+var precipmin = 750; 
+var precipmax = 2030; //mm/year
+
+//Frost-free days minimum
+var FFdays = 100;
+
+//Maximum average windspeed
+//var windmax = 9;
+
+//************************
+//pH
+var pHmin = 4.9;
+var pHmax = 6.5;
+//var pHminpref = 5.5;
+//var pHmaxpref = 6.5;
+
+//Drainage class
+/*0 = Excessively Drained
+//1 = Somewhat Excessively Drained
+//2 = Well Drained
+//3 = Moderately Well Drained
+//4 = Somewhat Poorly Drained
+//5 = Poorly Drained
+//6 = Very Poorly Drained
+//7 = Subaqueous
+*/
+var drainmin = 1;
+var drainmax = 4; 
+
+var drainminpref = 2;
+var drainmaxpref = 3; 
+
+//Soil order
+/*
+1 Alfisols
+2 Andisols
+3 Aridisols
+4 Entisols
+5 Gelisols
+6 Histosols
+7 Inceptisols
+8 Mollisols
+9 Spodosols
+10 Ultisols
+11 Vertisols
+*/
+// PREFERRED
+var order1 = 1;
+var order2 = 4;
+var order3 = 6;
+var order4 = 7;
+var order5 = 8;
+var order6 = 11;
+
+var order1pref = 1;
+var order2pref = 4;
+var order3pref = 7;
+//Soil texture 0-25 cm
+/*
+1 S Sand
+2 LS	Loamy sand
+3 SL	Sandy loam
+4 L	Loam
+5 SIL	Silt loam
+6 SI	Silt
+7 SCL	Sandy clay loam
+8 CL	Clay loam
+9 SICL	Silty clay loam
+10 SC	Sandy clay
+11 SIC	Silty clay
+12 C	Clay*/
+//BW sandy loam - 3, loam - 4, silt loam - 5, silty clay loam - 7 soils
+var STmin = 1;
+var STmax = 7;//up to 10, 11 questionable
+var STminpref = 3;
+var STmaxpref = 4;//up to 10
+//----------------------------
+
+//Latitude
+var latitude = ee.Image.pixelLonLat().select('latitude').clip(state.geometry());
+//Map.addLayer(latitude,{},'latitude');
+var latrange = (latitude.gte(latmin)).and(latitude.lte(latmax));
+Map.addLayer(latrange.selfMask(),{},'suitable latitude', false);
+
+//Elevation
+var DEM = ee.Image('USGS/3DEP/10m').clip(state.geometry());
+var elevation = DEM.select('elevation');
+/*Map.addLayer(elevation, {min: 0, max: 3000,   palette: [
+    '3ae237', 'b5e22e', 'd6e21f', 'fff705', 'ffd611', 'ffb613', 'ff8b13',
+    'ff6e08', 'ff500d', 'ff0000', 'de0101', 'c21301', '0602ff', '235cb1',
+    '307ef3', '269db1', '30c8e2', '32d3ef', '3be285', '3ff38f', '86e26f'
+  ],
+}, 'elevation');*/
+var elevrange = (elevation.gte(elevmin)).and(elevation.lte(elevmax));
+Map.addLayer(elevrange.selfMask(),{},'suitable elevation', false);
+
+//Slope
+var slope = ee.Terrain.slope(elevation);
+var sloperange = (slope.gte(slopemin)).and(slope.lte(slopemax));
+//var sloperangepref = (slope.gte(slopemin)).and(slope.lte(slopemaxpref));
+Map.addLayer(sloperange.selfMask(),{},'suitable slope', false);
+
+//Soil depth
+var soil_depth = ee.Image('projects/earthengine-legacy/assets/projects/sat-io/open-datasets/CSRL_soil_properties/land_use/soil_depth').clip(state.geometry());
+var depthrange = soil_depth.gte(depthmin);
+//var depthrangepref = soil_depth.gte(depthminpref);
+Map.addLayer(depthrange.selfMask(),{},'suitable soil depth', false);
+
+//Precipitation
+var climatedata_mo = ee.ImageCollection('OREGONSTATE/PRISM/AN81m')
+                  .filter(ee.Filter.date('2013-01-01', '2023-01-01'));
+
+var climatedata_an = climatedata_mo.mean().multiply(12);//.clip(state.geometry());
+//print(climatedata_an);
+var precipitation = climatedata_an.select('ppt').clip(state.geometry());
+
+var precipitationVis = {
+  min: 0.0,
+  max: 300.0,
+  palette: ['red', 'yellow', 'green', 'cyan', 'purple'],
+};
+//Map.addLayer(precipitation, precipitationVis, 'Precipitation')
+
+var preciprange = (precipitation.gte(precipmin)).and(elevation.lte(precipmax));
+Map.addLayer(preciprange.selfMask(),{},'suitable precipitation', false);
+
+
+//Drainage class
+/*var drainage = ee.Image("users/saraheb3/AFsuitability/DrainageIL");
+var drainageVis = {
+  min: 0.0,
+  max: 7.0,
+  palette: ['red', 'yellow', 'green', 'cyan', 'purple'],
+};
+//Map.addLayer(drainage, drainageVis,'drainage')*/
+/*0 = Excessively Drained
+//1 = Somewhat Excessively Drained
+//2 = Well Drained
+//3 = Moderately Well Drained
+//4 = Somewhat Poorly Drained
+//5 = Poorly Drained
+//6 = Very Poorly Drained
+//7 = Subaqueous
+*/
+
+//Tile drainage 
+Agtiles=Agtiles.clip(state.geometry());
+Map.addLayer(Agtiles.selfMask(),{palette:'orange'},'Agtiles',false);
+//print(Agtiles);
+var drainagerange = ((drainage.gte(drainmin)).and(drainage.lte(drainmax))).or(drainage.gte(3).and(Agtiles));
+Map.addLayer(drainagerange.selfMask(),{},'suitable drainage class', false);
+
+var drainagerangepref = ((drainage.gte(drainminpref)).and(drainage.lte(drainmaxpref))).or(drainage.gte(3).and(Agtiles));
+//Map.addLayer(drainagerangepref.selfMask(),{},'suitable drainage class', false);
+
+//pH
+var pH2 = ee.Image('projects/earthengine-legacy/assets/projects/sat-io/open-datasets/CSRL_soil_properties/chemical/ph').clip(state.geometry());
+var pHrange2 = (pH2.gte(pHmin)).and(pH2.lte(pHmax));
+Map.addLayer(pHrange2.selfMask(),{},'suitable pH2', false);
+
+pH = pH.clip(state.geometry());
+var pHrange = (pH.gte(pHmin)).and(pH.lte(pHmax));
+Map.addLayer(pHrange.selfMask(),{},'suitable pH', false);
+var pHVis = {
+  min: 4.0,
+  max: 8.0,
+  palette: ['red', 'yellow', 'green', 'cyan', 'purple'],
+};
+//Map.addLayer(pH,pHVis,'pH');
+
+var pH_combined = pHrange.or(pHrange2);
+Map.addLayer(pH_combined.selfMask(),{},'suitable pH combined', false);
+
+/*
+//Soil organic matter %
+var som_max = ee.Image('projects/earthengine-legacy/assets/projects/sat-io/open-datasets/CSRL_soil_properties/chemical/som_max').clip(state.geometry());
+//Map.addLayer(som_max);
+var somcmin = 0.02;
+var somcmax = 0.035;
+var somrange = (som_max.gte(somcmin)).and(som_max.lte(somcmax));
+Map.addLayer(somrange.selfMask(),{},'suitable soil organic matter', false);
+*/
+
+//Soil order
+var soil_order = ee.Image('projects/earthengine-legacy/assets/projects/sat-io/open-datasets/CSRL_soil_properties/land_use/soil_order').clip(state.geometry());
+//Map.addLayer(soil_order);
+/*
+1 Alfisols
+2 Andisols
+3 Aridisols
+4 Entisols
+5 Gelisols
+6 Histosols
+7 Inceptisols
+8 Mollisols
+9 Spodosols
+10 Ultisols
+11 Vertisols
+*/
+var orderrange = (soil_order.eq(order1)).or(soil_order.eq(order2)).or(soil_order.eq(order3)).or(soil_order.eq(order4)).or(soil_order.eq(order5)).or(soil_order.eq(order6));
+var orderrangepref = (soil_order.eq(order1pref)).or(soil_order.eq(order2pref)).or(soil_order.eq(order3pref));
+Map.addLayer(orderrange.selfMask(),{},'suitable soil order', false);
+
+
+//Soil texture 0-25 cm
+var soil_texture_profile = ee.ImageCollection('projects/earthengine-legacy/assets/projects/sat-io/open-datasets/CSRL_soil_properties/physical/soil_texture_profile').first().clip(state.geometry());
+//print(soil_texture_profile.filter(ee.Filter.equals('id_no','texture_025')))
+//print(soil_texture_profile.first())
+//var soil_texture_0_25cm =soil_texture_profile.select("texture_025");
+//Map.addLayer(soil_texture_profile)
+/*
+1 S Sand - coarse
+2 LS	Loamy sand - coarse
+3 SL	Sandy loam - moderately coarse
+4 L	Loam - medium
+5 SIL	Silt loam - medium
+6 SI	Silt - medium
+7 SCL	Sandy clay loam - moderately fine...
+8 CL	Clay loam
+9 SICL	Silty clay loam
+10 SC	Sandy clay
+11 SIC	Silty clay
+12 C	Clay*/
+var STrange = (soil_texture_profile.gte(STmin)).and(soil_texture_profile.lte(STmax));
+var STrangepref = (soil_texture_profile.gte(STminpref)).and(soil_texture_profile.lte(STmaxpref));
+Map.addLayer(STrange.selfMask(),{},'suitable soil texture', false);
+/*
+//Max average windspeed
+var wind = ee.ImageCollection('IDAHO_EPSCOR/GRIDMET')
+                  .filter(ee.Filter.date('2013-01-01', '2023-01-01')).mean().select('vs').clip(state.geometry());
+//Map.addLayer(wind);
+var windrange = wind.lte(windmax);
+Map.addLayer(windrange.selfMask(),{},'suitable wind speed', false);
+*/
+//Frost-free season
+//var FFseason = ee.Image("users/saraheb3/AFsuitability/FrostFreeDaysPerYearIL").clip(state.geometry());
+var FFrange = FFperiod.gte(FFdays);
+Map.addLayer(FFrange.selfMask(),{},'suitable frost-free season', false);
+
+
+//Tree growth requirements
+var requirements = latrange.and(elevrange).and(depthrange).and(preciprange).and(drainagerange).and(pH_combined).and(STrange).and(FFrange);//.and(orderrange); //keep .and(orderrange)?.and(windrange).and(meantemprange) .and(drainagerange)
+var preferredrequirements = latrange.and(elevrange).and(depthrange).and(preciprange).and(drainagerangepref).and(pH_combined).and(STrangepref).and(FFrange).and(orderrangepref);//.and(somrange);
+Map.addLayer(requirements.selfMask(),{},'suitable growth',true);
+//Map.addLayer(preferredrequirements.selfMask(),{},'preferred suitable growth',false);
+//preferredrequirements = requirements.add(preferredrequirements);
+
+//Export WhiteOak_suitabilityIL data to Google Drive
+Export.image.toDrive({
+  image: requirements,
+  description:'Sycamore_suitability_2Aug24',
+  folder: "GEE_AFSuitability",
+  scale:30,
+  maxPixels:1e13,
+  region: geometry,
+  skipEmptyTiles:true,
+  fileFormat: 'GeoTIFF'
+});
+
+//Export preferredrequirements data to Google Drive
+Export.image.toDrive({
+  image: preferredrequirements,
+  description:'Sycamore_bestsuitabilityIL_April21',
+  folder: "GEE_AFSuitability",
+  scale:30,
+  maxPixels:1e13,
+  region: geometry,
+  skipEmptyTiles:true,
+  fileFormat: 'GeoTIFF'
+});
+
+Export.image.toAsset({
+  image: requirements,
+  description:'Sycamore_suitabilityMW',
+  assetId: assetDescription,
+  scale:30,
+  maxPixels:1e13,
+  region: geometry
+});
